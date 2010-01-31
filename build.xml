@@ -1,0 +1,28 @@
+<project name="giftedmotion" default="dist">
+
+<property name="version" value="1.18" />
+
+<target name="dist" depends="clean, compile, bundle" />
+
+<target name="clean">
+  <delete dir="de"/>
+</target>
+
+<target name="compile">
+  <javac srcdir="src" destdir="." classpath=".:src" target="1.5" />
+</target>
+
+<target name="bundle">
+  <jar destfile="giftedmotion-${version}.jar">
+  <fileset dir="." includes="de/ src/ resources/ build.xml" />
+  <manifest>
+    <attribute name="Built-By" value="${user.name}"/>
+    <attribute name="Main-class" value="de.onyxbits.giftedmotion.Core"/>
+    <attribute  name="Class-path" value="." />
+    <attribute name="Implementation-Version" value="${version}" />
+  </manifest>
+  </jar>
+</target>
+
+
+</project>

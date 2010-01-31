@@ -1,0 +1,112 @@
+1.0:
+- First public release
+
+1.1:
+- Added build.xml
+- Added Settings dialog
+- Replaced numerical disposecodes with names.
+- More meaningful error message, when trying to export without actually
+  having something to export.
+- If an animated file is opened as an input file, all it's frames are
+  extracted and displayed.
+- Imageposition is now only shown in the statusline, while the mousebutton
+  is pressed.
+- Added ability to delete frames from the sequence.
+
+1.2
+- Fixed a typo in a method name (FrameSequence.removeFrameSequenceListener)
+- Replaced the term "export" with "save" in the GUI.
+- Fixed a bug where previewing would be messed up, after the showtime of
+  a frame was adjusted.
+- Fixed IO.export(): Control information (dispose code and delay time) were
+  written after adding the frame. It needs to be the other way around in
+  order to take effect.
+- Fixed Animation preview to properly dispose.
+- Put a default filename in the save dialog.
+- Improved loading of animated GIFs to not only load the frames, but also
+  the metadata.
+- Added X offset and Y offset controls to the sequenceeditor.
+
+1.3
+- Added lots of tooltips
+- added F1 accelerator key.
+
+1.4
+- Added i18n support.
+- Added german language translation.
+
+1.5
+- Fixed typos
+- Added a Messagedialog, telling the user how to load multiple files.
+- Added an Accessory to the loading dialog, that previews images and allows
+  the user to specify a default show time per frame.
+- Made the Filefilter a bit nicer.
+- switched handbook and using in help menu
+
+1.6
+- Fixed CatchOldJava -> Properly show a warning dialog, if the current Java
+  version does not support desktop integration.
+- Made resources/USING a HTML document for easier i18n.
+
+1.7
+- Added ability to load an existing GIF animation and extract it's frames.
+
+1.8
+- Added a logo to replace the standard cup of coffee logo.
+- Cleaned up the CatchOldJava class.
+
+1.9
+- Allowed -1 to be set as the number of repeats (plays the animation just
+  once).
+
+1.10
+- Added "." to the classpath to allow for translations without having to
+  extract/rebundle the software.
+- Added "apply to all frames" feature to the seqenceeditor.
+- Removed the ability to specify a default showtime from the load dialog.
+
+1.11
+- Removed the "using" item from the help menu.
+- Added a hint to use SHIFT and CRONTROL to select multiple files, when the 
+  load dialog is brought up.
+- Slight tweak to the sequenceeditor UI to visually set off the "apply to
+  all" checkbox a bit better.
+- Clicking the "open" button on a directory will now load the contents of
+  the directory instead of changing to it.
+
+1.12
+- Switched to the Tango icon theme (http://tango.freedesktop.org) for a more
+  modern look. Also, only needed icons are included now, leading to a much
+  smaller jar file.
+- Play/Pause are now two buttons instead of one with a toggleable image.
+- Merged ImageFileFilter and SwingImageFileFilter
+- Put an icon on transparent color button, replacing the X in a circle drawing.
+- Switched from JTextField to JLabel for the status messages. It looks a bit
+  better.
+  
+1.13
+- Added italian translation.
+
+1.14
+- Removed an ill designed feature, introduced in v1.11 of giftedmotion. The
+  "open" button in the load dialog will now properly open directories again,
+  instead of trying to load their contents. Selecting all files in a
+  directory can be accomplished by clicking into the file list and pressing
+  CTRL+A.
+
+1.15
+- Added Portuguese(Brazil) translations.
+
+1.16
+- Fixed logo not displaying in window title and taskbar.
+
+1.17
+- Added "duplicate" feature to copy a loaded frame (handy for making
+  ABABABA style animations, when only the two input files A and B exist).
+- Change the mousecursor to an hourglass symbol while exporting the animation.
+
+1.18
+- Menuitems now use CTRL instead of ALT focus
+- Made the toolbar detachable and changed it's default location to be below 
+  the menubar.
+- detached the status field from the toolbar and made it a statusbar.
