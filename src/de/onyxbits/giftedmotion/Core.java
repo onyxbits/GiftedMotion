@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.net.*;
 
 /**
@@ -146,6 +147,7 @@ ComponentListener, MouseMotionListener, MouseListener {
     togglesettings.setToolTipText(((ImageIcon)togglesettings.getIcon()).getDescription());
     record.setToolTipText(((ImageIcon)record.getIcon()).getDescription());
     pause.setEnabled(false);
+    status.setBorder(new BevelBorder(BevelBorder.LOWERED));
     
     // Build menus
     JMenu file = new JMenu(Dict.get("core.core.file"));
@@ -163,6 +165,7 @@ ComponentListener, MouseMotionListener, MouseListener {
     mbar.add(file);
     mbar.add(Box.createHorizontalGlue());
     mbar.add(help);
+    mbar.setBorder(new BevelBorder(BevelBorder.RAISED));
     setJMenuBar(mbar);
     
     // Build toolbar
@@ -177,6 +180,7 @@ ComponentListener, MouseMotionListener, MouseListener {
     tbar.add(pause);
     tbar.add(record);
     tbar.addSeparator();
+    
     
     // Put all together and display
     JPanel content = new JPanel();
