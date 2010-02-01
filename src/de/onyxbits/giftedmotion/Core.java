@@ -54,6 +54,11 @@ ComponentListener, MouseMotionListener, MouseListener {
   private JMenuItem handbook = new JMenuItem(Dict.get("core.handbook"));
   
   /**
+   * Go to FAQ
+   */
+  private JMenuItem faq = new JMenuItem(Dict.get("core.faq"));
+  
+  /**
    * Play animation
    */
   private JButton play = new JButton(IO.createIcon("Tango/22x22/actions/media-playback-start.png",Dict.get("core.play")));
@@ -128,6 +133,7 @@ ComponentListener, MouseMotionListener, MouseListener {
     extract.addActionListener(this);
     export.addActionListener(this);
     quit.addActionListener(this);
+    faq.addActionListener(this);
     handbook.addActionListener(this);
     license.addActionListener(this);
     open.addActionListener(this);
@@ -159,6 +165,8 @@ ComponentListener, MouseMotionListener, MouseListener {
     
     JMenu help = new JMenu(Dict.get("core.core.help"));
     help.add(handbook);
+    help.add(faq);
+    help.add(new JSeparator());
     help.add(license);
     
     JMenuBar mbar = new JMenuBar();
@@ -215,6 +223,7 @@ ComponentListener, MouseMotionListener, MouseListener {
     if (src == extract) handleExtract();
     if (src == export || src == record) handleExport();
     if (src == handbook) handleHandbook();
+    if (src == faq) handleFAQ();
     if (src == license) handleLicense();
     if (src == play || src == pause ) handlePlayPause();
     if (src == togglesettings ) handleTogglesettings();
@@ -383,6 +392,18 @@ ComponentListener, MouseMotionListener, MouseListener {
   
   public void handleHandbook() {
     String url = "http://www.onyxbits.de/giftedmotion/handbook";
+    try {
+      // Wrap this
+      CatchOldJava.openBrowser(url);
+    }
+    catch (Exception exp) {
+      JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handlehandbook.text",url),Dict.get("core.handlehandbook.title"), JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+
+  public void handleFAQ() {
+    String url = "http://www.onyxbits.de/faq/giftedmotion";
     try {
       // Wrap this
       CatchOldJava.openBrowser(url);
