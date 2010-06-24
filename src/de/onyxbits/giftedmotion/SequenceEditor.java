@@ -357,12 +357,14 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     }
   }
   
+  
   public void dataChanged(FrameSequence src) {
     frlst.removeListSelectionListener(this);
     dispose.removeChangeListener(this);
     showtime.removeChangeListener(this);
     xoff.removeChangeListener(this);
     yoff.removeChangeListener(this);
+    
     
     frlst.setListData(seq.frames);
     frlst.setSelectedValue(src.selected,true);
@@ -372,6 +374,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
       xoff.setValue(new Integer(src.selected.position.x));
       yoff.setValue(new Integer(src.selected.position.y));
     }
+    
     frlst.addListSelectionListener(this);
     dispose.addChangeListener(this);
     showtime.addChangeListener(this);

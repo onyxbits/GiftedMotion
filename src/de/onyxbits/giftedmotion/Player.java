@@ -1,4 +1,5 @@
 package de.onyxbits.giftedmotion;
+import javax.swing.*;
 
 /**
  * A thread, that steps through the animation.
@@ -16,6 +17,11 @@ public class Player extends Thread {
   private int repeat;
   
   /**
+   * Needed to fire events from the event dispatcher thread
+   */
+  PlayerHelper helper;
+  
+  /**
    * Construct a new Player
    * @seq the framesequence to play. 
    * @param repeat how often to repeat the animation (zero is infinite)
@@ -23,6 +29,7 @@ public class Player extends Thread {
   public Player(FrameSequence seq, int repeat) {
     this.seq=seq;
     this.repeat=repeat;
+    helper = new PlayerHelper(seq);
   }
   
   public void run() {
@@ -41,7 +48,7 @@ public class Player extends Thread {
           count--;
         }
         seq.selected=seq.frames[idx];
-        seq.fireDataChanged();
+        SwingUtilities.invokeAndWait(helper);
         if (repeat!=0 && count<=0) return;
       }
     }

@@ -5,6 +5,7 @@ import java.awt.geom.*;
 import javax.swing.*;
 import java.io.*;
 import javax.imageio.*;
+import java.util.*;
 
 /**
  * Preview an image file
@@ -20,6 +21,7 @@ public class Preview extends JPanel {
    * Image to show
    */
   private BufferedImage img;
+  
 
   public Preview () {}
   

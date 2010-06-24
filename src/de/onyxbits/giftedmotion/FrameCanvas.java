@@ -20,11 +20,6 @@ MouseListener, MouseMotionListener {
    */
   private Point offset;
   
-  /**
-   * Speed hack
-   */
-  private boolean painting=false;
-  
   
   public FrameCanvas(FrameSequence seq) {
     this.seq = seq;
@@ -33,32 +28,32 @@ MouseListener, MouseMotionListener {
   }
   
   public void paintComponent(Graphics g) {
-    if (painting) return;
-    painting=true;
+    //long time = System.currentTimeMillis();
     super.paintComponent( g );
     Dimension size = getSize();
     
     if (seq.selected==null) {
       g.clearRect(0,0,size.width,size.height);
-      painting=false;
       return;
     }
     
     BufferedImage previous = new BufferedImage(size.width,size.height,BufferedImage.TYPE_INT_ARGB);
-    Graphics pre_gr = previous.getGraphics();
     
     for(int i=0;i<seq.frames.length;i++) {
       
       
       seq.frames[i].paint(g);
       // Only draw the sequence up to the selected frame
+      // FIXME: This is utterly inefficient!
       if (seq.frames[i]==seq.selected) break;
       
       // If the selected frame is not reached yet, dispose
       switch(seq.frames[i].dispose) {
         case 0: {break;}
         case 1: {
+          Graphics pre_gr = previous.getGraphics();
           seq.frames[i].paint(pre_gr);
+          pre_gr.dispose();
           break;
         }
         case 2: {
@@ -73,8 +68,7 @@ MouseListener, MouseMotionListener {
         }
       }
     }
-    
-    painting=false;
+    //System.err.println("Time: "+(System.currentTimeMillis()-time));
   }
   
   public Dimension getPreferredSize() { return seq.getExpansion(); }
