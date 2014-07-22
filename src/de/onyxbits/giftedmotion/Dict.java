@@ -1,8 +1,6 @@
 package de.onyxbits.giftedmotion;
 import java.util.*;
 import java.text.*;
-import java.io.*;
-import java.net.*;
 
 /**
  * This class is responsible for i18n

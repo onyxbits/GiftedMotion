@@ -1,7 +1,6 @@
 package de.onyxbits.giftedmotion;
 import java.awt.*;
 import java.io.*;
-import java.util.*;
 import java.util.List;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -16,8 +15,6 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-
-import java.net.*;
 
 /**
  * Core class
@@ -44,7 +41,12 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	 * Load files
 	 */
 	private JMenuItem load = new JMenuItem(Dict.get("core.load"),KeyEvent.VK_L);
-
+	
+	/**
+	 * Close project
+	 */
+	private JMenuItem close = new JMenuItem(Dict.get("core.close"),KeyEvent.VK_L);
+	
 	/**
 	 * Export as animated GIF
 	 */
@@ -156,6 +158,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		pause.addActionListener(this);
 		record.addActionListener(this);
 		togglesettings.addActionListener(this);
+		close.addActionListener(this);
 
 		// Fancy stuff
 		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,ActionEvent.CTRL_MASK));
@@ -173,6 +176,8 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		// Build menus
 		JMenu file = new JMenu(Dict.get("core.core.file"));
 		file.add(load);
+		file.add(close);
+		file.add(new JSeparator());
 		file.add(extract);
 		file.add(export);
 		file.add(new JSeparator());
@@ -203,8 +208,15 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		tbar.add(pause);
 		tbar.add(record);
 		tbar.addSeparator();
-
-
+		
+		//Enable/disable buttons
+		play.setEnabled(false);
+		//pause.setEnabled(false);
+		record.setEnabled(false);
+		close.setEnabled(false);
+		export.setEnabled(false);
+		extract.setEnabled(false);
+		
 		// Put all together and display
 		JPanel content = new JPanel();
 		content.setLayout(new BorderLayout());
@@ -244,6 +256,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		if (src == license) handleLicense();
 		if (src == play || src == pause ) handlePlayPause();
 		if (src == togglesettings ) handleTogglesettings();
+		if (src == close) handleClose();
 	}
 
 	public void componentHidden(ComponentEvent e) {}
@@ -328,6 +341,13 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			if (frames.length==1) {
 				JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
 			}
+			
+			play.setEnabled(true);
+			record.setEnabled(true);
+			close.setEnabled(true);
+			export.setEnabled(true);
+			extract.setEnabled(true);
+			
 		}
 		catch (IllegalArgumentException exp) {
 			postStatus(Dict.get("core.handleload.illegalargumentexception",exp.getMessage()));
@@ -454,6 +474,18 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		if (setedit.isVisible()) setedit.setVisible(false);
 		else setedit.setVisible(true);
 	}
+	
+	public void handleClose()
+	{
+		seqedit.dispose();
+		display.dispose();
+		
+		play.setEnabled(false);
+		record.setEnabled(false);
+		close.setEnabled(false);
+		export.setEnabled(false);
+		extract.setEnabled(false);
+	}
 
 	/**
 	 **  Utility functions
@@ -571,6 +603,8 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 			for (DataFlavor flavor : flavors) {
 				if (flavor.isFlavorJavaFileListType()) {
+					
+					@SuppressWarnings("unchecked")
 					List<File> files = (List<File>)transferable.getTransferData(flavor);
 
 					SingleFrame[] frames = IO.load(files.toArray(new File[files.size()]));
@@ -578,12 +612,20 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 						postStatus(Dict.get("core.handleload.nothing"));
 						return;
 					}
+
 					setFrameSequence(new FrameSequence(frames));
+					
 					if (frames.length==1) {
 						JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
 					}
 				}
 			}
+			
+			play.setEnabled(true);
+			record.setEnabled(true);
+			close.setEnabled(true);
+			export.setEnabled(true);
+			extract.setEnabled(true);
 
 			dtde.dropComplete(true);
 		} catch (IOException | UnsupportedFlavorException e) {}

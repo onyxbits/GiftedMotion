@@ -1,11 +1,8 @@
 package de.onyxbits.giftedmotion;
 import java.awt.*;
 import java.io.*;
-import java.util.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.beans.*;
-import javax.swing.*;
 
 /**
  * Accessory for the Loading dialog
@@ -15,7 +12,7 @@ public class LoadAccessory extends JPanel implements PropertyChangeListener {
   /**
    * Lets the user pick a default showtime for each frame
    */
-  private JSpinner showtime = new JSpinner (new SpinnerNumberModel(100,0,1000000,10));
+  //private JSpinner showtime = new JSpinner (new SpinnerNumberModel(100,0,1000000,10));
   
   /**
    * Image preview canvas

@@ -36,7 +36,7 @@ public class CatchOldJava {
    */
   public static void decorateWindow(Window w) {
     try {
-      ArrayList icolst = new ArrayList();
+      ArrayList<Image> icolst = new ArrayList<Image>();
       icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-32x32.png")).getImage());  
       icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-48x48.png")).getImage());
       icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-64x64.png")).getImage());

@@ -1,5 +1,4 @@
 package de.onyxbits.giftedmotion;
-import java.awt.event.*;
 
 /**
  * Implementors of this class can request to be notified of changes in a

@@ -2,7 +2,6 @@ package de.onyxbits.giftedmotion;
 import javax.swing.*;
 
 import java.awt.*;
-import java.beans.*;
 
 import javax.swing.event.*;
 
