@@ -1,8 +1,11 @@
 package de.onyxbits.giftedmotion;
 import javax.swing.*;
+
 import java.awt.*;
 import java.beans.*;
+
 import javax.swing.event.*;
+
 import java.awt.event.*;
 
 /**
@@ -10,7 +13,7 @@ import java.awt.event.*;
  * animated GIF.
  */
 public class SettingsEditor extends JInternalFrame implements ChangeListener,
-ActionListener {
+ActionListener, MouseListener {
 
   /**
    * How often to repeat
@@ -39,6 +42,8 @@ ActionListener {
     chooser.setPreviewPanel(new JPanel());
     chooser.getSelectionModel().addChangeListener(this);
     trans.addActionListener(this);
+    
+    addMouseListener(this);
     setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
     
     trans.setToolTipText(Dict.get("settingseditor.settingseditor.trans"));
@@ -89,5 +94,24 @@ ActionListener {
     trans.setIcon(new ColorIcon(null,16,16));
     chooser.setColor(null);
   }
+
+@Override
+public void mouseClicked(MouseEvent e){}
+
+@Override
+public void mousePressed(MouseEvent e){}
+
+@Override
+public void mouseReleased(MouseEvent e)
+{
+	if (getY() < 0)
+		setLocation(getX(), 0);
+}
+
+@Override
+public void mouseEntered(MouseEvent e){	}
+
+@Override
+public void mouseExited(MouseEvent e){}
   
 }
