@@ -23,6 +23,19 @@ public class IO {
   }
   
   /**
+   * Load a file and convert it as a frame
+   * @param file the file to load
+   * @return the frame constructed from the files. A file not containing an
+   * image in a valid format will cause an InvalidArguementException to be
+   * thrown.
+   * be loaded will be represented by an errorshape.
+   */
+  public static SingleFrame[] load(File file) throws IOException, FileNotFoundException, IllegalArgumentException
+  {
+	  return load(new File[]{file});
+  }
+  
+  /**
    * Load a bunch of files and convert them into frames
    * @param files the files to load images from.
    * @return the frames constructed from the files. A file not containing an

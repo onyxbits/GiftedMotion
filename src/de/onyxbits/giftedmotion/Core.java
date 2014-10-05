@@ -25,7 +25,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	/**
 	 * Program version as shown in the title
 	 */
-	public static final String VERSION="GiftedMotion "+Package.getPackage("de.onyxbits.giftedmotion").getImplementationVersion();
+	public static final String VERSION="GiftedMotion "+((Package.getPackage("de.onyxbits.giftedmotion").getImplementationVersion()!=null) ? Package.getPackage("de.onyxbits.giftedmotion").getImplementationVersion() : "");
 
 	/**
 	 * Back reference to the running program
@@ -91,12 +91,27 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	 * Import (same as load)
 	 */
 	private JButton open = new JButton(IO.createIcon("Tango/22x22/actions/document-open.png",Dict.get("core.open")));
+	
+	/**
+	 * Close project button
+	 */
+	private JButton closeButton = new JButton(IO.createIcon("Tango/22x22/actions/system-log-out.png", Dict.get("core.close")));
 
 	/**
 	 * Toggle displaying of the settings window
 	 */
 	private JButton togglesettings = new JButton(IO.createIcon("Tango/22x22/categories/preferences-desktop.png",Dict.get("core.togglesettings")));
 
+	/**
+	 * Drag tool
+	 */
+	private JToggleButton dragButton = new JToggleButton(IO.createIcon("Misc/Drag.png", Dict.get("core.dragtool")));
+	
+	/**
+	 * Rotate tool
+	 */
+	private JToggleButton rotateButton = new JToggleButton(IO.createIcon("Misc/Rotate.png", Dict.get("core.rotatetool")));
+	
 	/**
 	 * Sequence Editor
 	 */
@@ -138,10 +153,25 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	private JLabel status = new JLabel();
 
 	/**
+	 * Button group for tools
+	 */
+	private ButtonGroup toolGroup = new ButtonGroup();
+	
+	/**
+	 * RotateTool saves state
+	 */
+	private RotateTool rotateTool = new RotateTool();
+	
+	
+	/**
 	 * Construct a new instance of the program. There may only be one object
 	 * of this class present.
 	 */
 	public Core() {
+		//Enable fullscreen mode for Mac OSX
+		if (MacOSCompat.isMacOSX())
+			MacOSCompat.enableFullScreenMode(this);
+		
 		//Create dragdrop stuff
 		new DropTarget(this, this);
 
@@ -154,11 +184,14 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		handbook.addActionListener(this);
 		license.addActionListener(this);
 		open.addActionListener(this);
+		closeButton.addActionListener(this);
 		play.addActionListener(this);
 		pause.addActionListener(this);
 		record.addActionListener(this);
 		togglesettings.addActionListener(this);
 		close.addActionListener(this);
+		dragButton.addActionListener(this);
+		rotateButton.addActionListener(this);
 
 		// Fancy stuff
 		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,ActionEvent.CTRL_MASK));
@@ -166,10 +199,14 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
 		handbook.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
 		open.setToolTipText(((ImageIcon)open.getIcon()).getDescription());
+		closeButton.setToolTipText(((ImageIcon)closeButton.getIcon()).getDescription());
 		play.setToolTipText(((ImageIcon)play.getIcon()).getDescription());
 		pause.setToolTipText(((ImageIcon)pause.getIcon()).getDescription());
 		togglesettings.setToolTipText(((ImageIcon)togglesettings.getIcon()).getDescription());
 		record.setToolTipText(((ImageIcon)record.getIcon()).getDescription());
+		dragButton.setToolTipText(((ImageIcon)(dragButton.getIcon())).getDescription());
+		rotateButton.setToolTipText(((ImageIcon)(rotateButton.getIcon())).getDescription());
+		
 		pause.setEnabled(false);
 		status.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
@@ -201,6 +238,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		tbar.setRollover(true);
 		tbar.setFloatable(true);
 		tbar.add(open);
+		tbar.add(closeButton);
 		tbar.add(togglesettings);
 
 		tbar.addSeparator();
@@ -208,14 +246,17 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		tbar.add(pause);
 		tbar.add(record);
 		tbar.addSeparator();
+
+		toolGroup.add(dragButton);
+		toolGroup.add(rotateButton);
+		
+		tbar.add(dragButton);
+		tbar.add(rotateButton);
+		
+		dragButton.setSelected(true);
 		
 		//Enable/disable buttons
-		play.setEnabled(false);
-		//pause.setEnabled(false);
-		record.setEnabled(false);
-		close.setEnabled(false);
-		export.setEnabled(false);
-		extract.setEnabled(false);
+		disableButtons();
 		
 		// Put all together and display
 		JPanel content = new JPanel();
@@ -226,13 +267,39 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		setContentPane(content);
 		workspace.add(setedit);
 		postStatus("");
-
-
 	}
+	
+	//UI Disabling/Enabling
 
 	/**
 	 ** Various event listeners interface implementations
 	 **/
+	
+	public void enableButtons()
+	{
+		play.setEnabled(true);
+		record.setEnabled(true);
+		close.setEnabled(true);
+		export.setEnabled(true);
+		extract.setEnabled(true);
+		togglesettings.setEnabled(true);
+		dragButton.setEnabled(true);
+		rotateButton.setEnabled(true);
+		closeButton.setEnabled(true);
+	}
+	
+	public void disableButtons()
+	{
+		play.setEnabled(false);
+		record.setEnabled(false);
+		close.setEnabled(false);
+		export.setEnabled(false);
+		extract.setEnabled(false);
+		togglesettings.setEnabled(false);
+		dragButton.setEnabled(false);
+		rotateButton.setEnabled(false);
+		closeButton.setEnabled(false);
+	}
 
 	public void windowClosing(WindowEvent e) { handleQuit(); }
 	public void focusLost(FocusEvent e) {}
@@ -256,7 +323,9 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		if (src == license) handleLicense();
 		if (src == play || src == pause ) handlePlayPause();
 		if (src == togglesettings ) handleTogglesettings();
-		if (src == close) handleClose();
+		if (src == close || src == closeButton) handleClose();
+		if (src == dragButton) display.getCanvas().setTool(new DragTool());
+		if (src == rotateButton) display.getCanvas().setTool(rotateTool);
 	}
 
 	public void componentHidden(ComponentEvent e) {}
@@ -275,11 +344,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	public void mouseMoved(MouseEvent e) {}
 	public void mouseDragged(MouseEvent e) {
 		if (seq.selected==null) return;
-		Integer pos[] = {
-				new Integer(seq.selected.position.x),
-				new Integer(seq.selected.position.y)
-		};
-		postStatus(Dict.get("core.mousedragged",pos));
+		postStatus(display.getCanvas().getTool().getStatus(seq.selected));
 	}
 
 	public void mouseEntered(MouseEvent e) {}
@@ -288,18 +353,12 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 	public void mousePressed(MouseEvent e) {
 		if (seq.selected==null) return;
-		Integer pos[] = {
-				new Integer(seq.selected.position.x),
-				new Integer(seq.selected.position.y)
-		};
-		postStatus(Dict.get("core.mousepressed",pos));
+		postStatus(display.getCanvas().getTool().getStatus(seq.selected));
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		postStatus("");
 	}  
-
-
 
 	/**
 	 ** Handlers for events created by GUI elements
@@ -339,14 +398,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			}
 			setFrameSequence(new FrameSequence(frames));
 			if (frames.length==1) {
-				JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
+				//The user probably knows what they're doing. That dialog clashed anyways.
+				//JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
 			}
 			
-			play.setEnabled(true);
-			record.setEnabled(true);
-			close.setEnabled(true);
-			export.setEnabled(true);
-			extract.setEnabled(true);
+			enableButtons();
 			
 		}
 		catch (IllegalArgumentException exp) {
@@ -359,6 +415,9 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			postStatus(Dict.get("core.handleload.exception"));
 			exp.printStackTrace();
 		}
+		
+		dragButton.setSelected(true);
+		rotateTool = new RotateTool();
 	}
 
 	public void handleExtract() {
@@ -480,11 +539,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		seqedit.dispose();
 		display.dispose();
 		
-		play.setEnabled(false);
-		record.setEnabled(false);
-		close.setEnabled(false);
-		export.setEnabled(false);
-		extract.setEnabled(false);
+		disableButtons();
 	}
 
 	/**
@@ -616,16 +671,16 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 					setFrameSequence(new FrameSequence(frames));
 					
 					if (frames.length==1) {
-						JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
+						//Sucks that this is just duplicated here. Probably needs refactoring
+						//JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
 					}
 				}
 			}
 			
-			play.setEnabled(true);
-			record.setEnabled(true);
-			close.setEnabled(true);
-			export.setEnabled(true);
-			extract.setEnabled(true);
+			enableButtons();
+			
+			dragButton.setSelected(true);
+			rotateTool = new RotateTool();
 
 			dtde.dropComplete(true);
 		} catch (IOException | UnsupportedFlavorException e) {}

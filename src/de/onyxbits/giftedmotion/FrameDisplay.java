@@ -14,7 +14,6 @@ public class FrameDisplay extends JInternalFrame implements MouseListener {
    */
   private FrameCanvas canvas;
   
-  
   public FrameDisplay(FrameCanvas canvas) {
     super("",true,false,false,false);
     setFrameIcon(null);
