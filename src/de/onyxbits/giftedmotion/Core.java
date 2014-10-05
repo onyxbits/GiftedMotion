@@ -12,6 +12,7 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -178,7 +179,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	 * of this class present.
 	 */
 	public Core() {
-		//Enable fullscreen mode for Mac OSX
+		//Mac OS compatibility things (fullscreen mode, icon setting)
 		if (MacOSCompat.isMacOSX())
 			MacOSCompat.enableFullScreenMode(this);
 		
@@ -309,6 +310,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		closeButton.setEnabled(true);
 		resizeButton.setEnabled(true);
 		onionButton.setEnabled(true);
+		deoptimize.setEnabled(true);
 	}
 	
 	public void disableButtons()
@@ -324,6 +326,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		closeButton.setEnabled(false);
 		resizeButton.setEnabled(false);
 		onionButton.setEnabled(false);
+		deoptimize.setEnabled(false);
 	}
 
 	public void windowClosing(WindowEvent e) { handleQuit(); }
@@ -504,34 +507,45 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	
 	public void handleDeoptimize()
 	{
-		try {
-			postStatus("");
-			if (seq==null) {
-				postStatus(Dict.get("core.handleexport.nothing"));
-				return;
-			}
-			JFileChooser jfc = new JFileChooser(directory);
-			jfc.setSelectedFile(new File(Dict.get("core.handledeoptimize.defaultname")));
-			if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
-			File dest=jfc.getSelectedFile();
-			directory=jfc.getCurrentDirectory();
 
-			Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
-			setCursor(hourglassCursor);
-			postStatus(Dict.get("core.handleexport.saving")); // No idea why this does not show!
-			repaint();
-			IO.exportDeoptimized(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
-			postStatus(Dict.get("core.handleexport.finished"));
-			hourglassCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-			setCursor(hourglassCursor);
+		
+		Dimension size = display.getCanvas().getSize();
+		BufferedImage outputBuf = new BufferedImage((int)size.getWidth(), (int)size.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		for (int i=0;i<seq.frames.length;i++) {
+			Graphics g = outputBuf.getGraphics();
+			seq.frames[i].paint(g);
+			g.dispose();
+			seq.frames[i].raw = Util.copyImage(outputBuf);
 		}
-		catch (FileNotFoundException exp) {
-			postStatus(Dict.get("core.handleexport.filenotfoundexception",exp.getMessage()));
-		}
-		catch(Exception exp) {
-			postStatus(Dict.get("core.handleexport.exception"));
-			exp.printStackTrace();
-		}
+		
+//		try {
+//			postStatus("");
+//			if (seq==null) {
+//				postStatus(Dict.get("core.handleexport.nothing"));
+//				return;
+//			}
+//			JFileChooser jfc = new JFileChooser(directory);
+//			jfc.setSelectedFile(new File(Dict.get("core.handledeoptimize.defaultname")));
+//			if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
+//			File dest=jfc.getSelectedFile();
+//			directory=jfc.getCurrentDirectory();
+//
+//			Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
+//			setCursor(hourglassCursor);
+//			postStatus(Dict.get("core.handleexport.saving")); // No idea why this does not show!
+//			repaint();
+//			IO.exportDeoptimized(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
+//			postStatus(Dict.get("core.handleexport.finished"));
+//			hourglassCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+//			setCursor(hourglassCursor);
+//		}
+//		catch (FileNotFoundException exp) {
+//			postStatus(Dict.get("core.handleexport.filenotfoundexception",exp.getMessage()));
+//		}
+//		catch(Exception exp) {
+//			postStatus(Dict.get("core.handleexport.exception"));
+//			exp.printStackTrace();
+//		}
 	}
 
 	public void handleLicense() {
@@ -656,10 +670,14 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 
 	public static void main(String args[]) {
+		//if (MacOSCompat.isMacOSX())
+			//MacOSCompat.setAppIcon(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
+		
 		new Dict();
 		app = new Core();
 		app.setSize(new Dimension(800,600));
 		app.setTitle(VERSION);
+
 		CatchOldJava.decorateWindow(app);
 
 		app.setVisible(true);

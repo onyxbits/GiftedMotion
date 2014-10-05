@@ -1,7 +1,10 @@
 package de.onyxbits.giftedmotion;
 
+import java.awt.Image;
 import java.awt.Window;
 import java.lang.reflect.Method;
+
+import com.apple.eawt.Application;
 
 public class MacOSCompat
 {
@@ -23,4 +26,12 @@ public class MacOSCompat
             t.printStackTrace();
         }
     }
+	
+	public static void setAppIcon(Image i)
+	{
+		Application application = Application.getApplication();
+		application.setDockIconImage(i);
+	}
+	
+	
 }
