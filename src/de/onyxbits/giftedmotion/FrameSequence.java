@@ -21,7 +21,7 @@ public class FrameSequence {
   /**
    * Eventlisteners
    */
-  private Vector listeners = new Vector();
+  private Vector<FrameSequenceListener> listeners = new Vector<FrameSequenceListener>();
   
   /**
    * Create a new FrameSequence
@@ -76,7 +76,7 @@ public class FrameSequence {
       return;
     }
     if (frames.length==0) return;
-    Vector tmp = new Vector();
+    Vector<SingleFrame> tmp = new Vector<SingleFrame>();
     for(int i=0;i<frames.length;i++) tmp.add(frames[i]);
     tmp.remove(frame);
     frames = new SingleFrame[tmp.size()];
@@ -152,7 +152,7 @@ public class FrameSequence {
   protected void fireDataChanged() {
     int size= listeners.size();
     for(int i=0;i<size;i++) {
-      ((FrameSequenceListener)listeners.get(i) ).dataChanged(this);
+      (listeners.get(i)).dataChanged(this);
     }
   }
   

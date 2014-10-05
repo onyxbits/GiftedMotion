@@ -1,14 +1,16 @@
 package de.onyxbits.giftedmotion;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.event.*;
 
 /**
  * Edit the framesequence
  */
 public class SequenceEditor extends JInternalFrame implements ActionListener,
-FrameSequenceListener, ChangeListener, ListSelectionListener {
+FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, ItemListener {
 
   /**
    * Dispose codes in readable form
@@ -23,7 +25,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
   /**
    * Lists all frames in the sequence
    */
-  private JList frlst;
+  private JList<SingleFrame> frlst;
   
   /**
    * X Offset
@@ -43,7 +45,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
   /**
    * Peer for SingleFrame.dispose
    */
-  private JSpinner dispose = new JSpinner(new SpinnerListModel(dcodes));
+  private JComboBox<String> dispose = new JComboBox<String>(dcodes);
   
   /**
    * Move frame in sequence
@@ -79,7 +81,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     super(Dict.get("sequenceeditor.sequenceeditor.title"),false,false,false,false);
     
     this.seq=seq;
-    frlst = new JList(seq.frames);
+    frlst = new JList<SingleFrame>(seq.frames);
     
     setContentPane(getContent());
     pack();
@@ -88,11 +90,14 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     later.addActionListener(this);
     duplicate.addActionListener(this);
     delete.addActionListener(this);
-    dispose.addChangeListener(this);
+    //dispose.addChangeListener(this);
+    dispose.addItemListener(this);
     frlst.addListSelectionListener(this);
     showtime.addChangeListener(this);
     xoff.addChangeListener(this);
     yoff.addChangeListener(this);
+    
+    addMouseListener(this);
     
     apply.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.apply"));
     sooner.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.sooner"));
@@ -299,25 +304,30 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
   }
   
   public void actionPerformed(ActionEvent e) {
-    if (seq.selected==null) return;
-    Object src = e.getSource();
-    
-    if (src==dispose) {
-      seq.selected.dispose=0;
-      for (int i=0;i<dcodes.length;i++) {
-        if (dcodes[i].equals(dispose.getValue())) seq.selected.dispose=i;
-      }
-      seq.fireDataChanged();
-    }
-    
-    if (src==sooner) seq.move(seq.selected,true);
-    if (src==later) seq.move(seq.selected,false);
-    if (src==duplicate) {
-      seq.add(new SingleFrame(seq.selected), seq.getSelectedIndex());
-    }
-    if (src==delete) {
-      seq.remove(seq.selected);
-    }
+	  if (seq.selected==null) return;
+	  Object src = e.getSource();
+
+	  if (src==dispose) {
+		  seq.selected.dispose=0;
+		  for (int i=0;i<dcodes.length;i++) {
+			  if (dcodes[i].equals(dispose.getSelectedItem())) seq.selected.dispose=i;
+		  }
+		  seq.fireDataChanged();
+	  }
+
+	  if (src==sooner) seq.move(seq.selected,true);
+	  if (src==later) seq.move(seq.selected,false);
+	  if (src==duplicate) {
+		  seq.add(new SingleFrame(seq.selected), seq.getSelectedIndex());
+	  }
+	  if (src==delete) {
+		  int prevSeq = seq.getSelectedIndex();
+		  seq.remove(seq.selected);
+		  if (prevSeq <= frlst.getModel().getSize()-1)
+			  frlst.setSelectedIndex(prevSeq);
+		  else
+			  frlst.setSelectedIndex(frlst.getModel().getSize()-1);
+	  }
   }
   
   public void stateChanged(ChangeEvent e) {
@@ -334,15 +344,16 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     }
     
     if (src==dispose) {
-      int val=0;
-      for (int i=0;i<dcodes.length;i++) {
-        if (dcodes[i].equals(dispose.getValue())) val=i;
-      }
-      if (apply.isSelected()) {
-        for (int i=0;i<seq.frames.length;i++) seq.frames[i].dispose=val;
-      }
-      else seq.selected.dispose=val;
-      seq.fireDataChanged();
+    	int val=0;
+    	for (int i=0;i<dcodes.length;i++) {
+    		if (dcodes[i].equals(dispose.getSelectedItem())) val=i;
+    	}
+    	if (apply.isSelected()) {
+    		for (int i=0;i<seq.frames.length;i++) seq.frames[i].dispose=val;
+    	}
+    	else seq.selected.dispose=val;
+
+    	seq.fireDataChanged();
     }
     
     if (src==xoff || src==yoff) {
@@ -357,10 +368,10 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     }
   }
   
-  
   public void dataChanged(FrameSequence src) {
     frlst.removeListSelectionListener(this);
-    dispose.removeChangeListener(this);
+    //dispose.removeChangeListener(this);
+    dispose.removeItemListener(this);
     showtime.removeChangeListener(this);
     xoff.removeChangeListener(this);
     yoff.removeChangeListener(this);
@@ -369,14 +380,15 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     frlst.setListData(seq.frames);
     frlst.setSelectedValue(src.selected,true);
     if (src.selected!=null) {
-      dispose.setValue(dcodes[src.selected.dispose]);
+      dispose.setSelectedItem(dcodes[src.selected.dispose]);
       showtime.setValue(new Integer(src.selected.showtime));
       xoff.setValue(new Integer(src.selected.position.x));
       yoff.setValue(new Integer(src.selected.position.y));
     }
     
     frlst.addListSelectionListener(this);
-    dispose.addChangeListener(this);
+    //dispose.addChangeListener(this);
+    dispose.addItemListener(this);
     showtime.addChangeListener(this);
     xoff.addChangeListener(this);
     yoff.addChangeListener(this);
@@ -388,6 +400,44 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     seq.selected=(SingleFrame)frlst.getSelectedValue();
     seq.fireDataChanged();
   }
-  
+
+@Override
+public void mouseReleased(MouseEvent e)
+{
+	if (getY() < 0)
+		setLocation(getX(), 0);
+}
+
+@Override
+public void mouseClicked(MouseEvent e){}
+
+@Override
+public void mousePressed(MouseEvent e){}
+
+@Override
+public void mouseEntered(MouseEvent e){}
+
+@Override
+public void mouseExited(MouseEvent e){}
+
+@Override
+public void itemStateChanged(ItemEvent e)
+{
+	Object src = e.getSource();
+	
+	if (src==dispose) {
+		
+    	int val=0;
+    	for (int i=0;i<dcodes.length;i++) {
+    		if (dcodes[i].equals(dispose.getSelectedItem())) val=i;
+    	}
+    	if (apply.isSelected()) {
+    		for (int i=0;i<seq.frames.length;i++) seq.frames[i].dispose=val;
+    	}
+    	else seq.selected.dispose=val;
+
+    	seq.fireDataChanged();
+    }
+}
   
 }

@@ -1,6 +1,5 @@
 package de.onyxbits.giftedmotion;
 import java.io.File;
-import java.util.*;
 
 /**
  * FileFilter, that only allows imagefiles and optionally directories

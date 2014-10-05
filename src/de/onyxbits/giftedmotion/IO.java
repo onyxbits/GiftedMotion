@@ -3,11 +3,14 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.image.*;
+
 import javax.swing.*;
+
 import java.net.*;
+
 import javax.imageio.*;
-import java.awt.image.*;
 import javax.imageio.metadata.*;
+
 import org.w3c.dom.*;
 
 /**
@@ -20,6 +23,19 @@ public class IO {
   }
   
   /**
+   * Load a file and convert it as a frame
+   * @param file the file to load
+   * @return the frame constructed from the files. A file not containing an
+   * image in a valid format will cause an InvalidArguementException to be
+   * thrown.
+   * be loaded will be represented by an errorshape.
+   */
+  public static SingleFrame[] load(File file) throws IOException, FileNotFoundException, IllegalArgumentException
+  {
+	  return load(new File[]{file});
+  }
+  
+  /**
    * Load a bunch of files and convert them into frames
    * @param files the files to load images from.
    * @return the frames constructed from the files. A file not containing an
@@ -28,9 +44,9 @@ public class IO {
    * be loaded will be represented by an errorshape.
    */
   public static SingleFrame[] load(File[] files) throws IOException, FileNotFoundException, IllegalArgumentException {
-    Vector tmp = new Vector();
+    Vector<SingleFrame> tmp = new Vector<SingleFrame>();
     for(int i=0;i<files.length;i++) {
-      Iterator it = ImageIO.getImageReadersBySuffix(getSuffix(files[i]));
+      Iterator<ImageReader> it = ImageIO.getImageReadersBySuffix(getSuffix(files[i]));
       if (!it.hasNext()) throw new IllegalArgumentException(files[i].getPath());
       ImageReader reader = (ImageReader)it.next();
       reader.setInput(ImageIO.createImageInputStream(new FileInputStream(files[i])));

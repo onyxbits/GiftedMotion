@@ -16,10 +16,9 @@ MouseListener, MouseMotionListener {
   private FrameSequence seq;
   
   /**
-   * Used for dragging -> Where the mousecursor is relative to the position
+   * The tool used for transforming the 
    */
-  private Point offset;
-  
+  private TransformTool tool = new DragTool();
   
   public FrameCanvas(FrameSequence seq) {
     this.seq = seq;
@@ -77,6 +76,16 @@ MouseListener, MouseMotionListener {
     repaint();
   }
   
+  public void setTool(TransformTool t)
+  {
+	  tool = t;
+  }
+  
+  public TransformTool getTool()
+  {
+	  return tool;
+  }
+  
   public void mouseClicked(MouseEvent e) {}
   
   public void mouseEntered(MouseEvent e) {}
@@ -86,19 +95,18 @@ MouseListener, MouseMotionListener {
   public void mousePressed(MouseEvent e) {
     if (seq.selected==null) return;
     Point pos = e.getPoint();
-    offset= new Point(pos.x-seq.selected.position.x,pos.y-seq.selected.position.y);
+    tool.setOffset(new Point(pos.x-seq.selected.position.x,pos.y-seq.selected.position.y));
+    tool.beginTransform(seq.selected, e.getPoint());
   }
 
   public void mouseReleased(MouseEvent e) {
-    offset=null;
     seq.fireDataChanged();
+    tool.endTransform(seq.selected, e.getPoint());
   }
   
   public void mouseDragged(MouseEvent e) {
     if (seq.selected==null) return;
-    Point pos = e.getPoint();
-    seq.selected.position.x=pos.x-offset.x;
-    seq.selected.position.y=pos.y-offset.y;
+    tool.transform(seq.selected, e.getPoint());
     repaint();
   }
   

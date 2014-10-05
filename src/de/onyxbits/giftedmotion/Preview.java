@@ -1,11 +1,9 @@
 package de.onyxbits.giftedmotion;
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.geom.*;
 import javax.swing.*;
 import java.io.*;
 import javax.imageio.*;
-import java.util.*;
 
 /**
  * Preview an image file
