@@ -53,6 +53,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	private JMenuItem export = new JMenuItem(Dict.get("core.export"),KeyEvent.VK_S);
 
 	/**
+	 * Export as deoptimized GIF
+	 */
+	private JMenuItem deoptimize = new JMenuItem(Dict.get("core.deoptimize"));
+	
+	/**
 	 * Save the sequence as individual files
 	 */
 	private JMenuItem extract = new JMenuItem(Dict.get("core.extract"),KeyEvent.VK_E);
@@ -184,6 +189,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		load.addActionListener(this);
 		extract.addActionListener(this);
 		export.addActionListener(this);
+		deoptimize.addActionListener(this);
 		quit.addActionListener(this);
 		faq.addActionListener(this);
 		handbook.addActionListener(this);
@@ -226,6 +232,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		file.add(close);
 		file.add(new JSeparator());
 		file.add(extract);
+		file.add(deoptimize);
 		file.add(new JSeparator());
 		file.add(quit);
 
@@ -336,6 +343,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		if (src == load || src == open ) handleLoad();
 		if (src == extract) handleExtract();
 		if (src == export || src == record) handleExport();
+		if (src == deoptimize) handleDeoptimize();
 		if (src == handbook) handleHandbook();
 		if (src == faq) handleFAQ();
 		if (src == license) handleLicense();
@@ -440,6 +448,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		{
 			dragButton.setSelected(true);
 			onionButton.setSelected(false);
+			display.getCanvas().setOnionskin(false);
 		}
 	}
 
@@ -480,6 +489,38 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			setCursor(hourglassCursor);
 			postStatus(Dict.get("core.handleexport.saving")); // No idea why this does not show!
 			IO.export(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
+			postStatus(Dict.get("core.handleexport.finished"));
+			hourglassCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+			setCursor(hourglassCursor);
+		}
+		catch (FileNotFoundException exp) {
+			postStatus(Dict.get("core.handleexport.filenotfoundexception",exp.getMessage()));
+		}
+		catch(Exception exp) {
+			postStatus(Dict.get("core.handleexport.exception"));
+			exp.printStackTrace();
+		}
+	}
+	
+	public void handleDeoptimize()
+	{
+		try {
+			postStatus("");
+			if (seq==null) {
+				postStatus(Dict.get("core.handleexport.nothing"));
+				return;
+			}
+			JFileChooser jfc = new JFileChooser(directory);
+			jfc.setSelectedFile(new File(Dict.get("core.handledeoptimize.defaultname")));
+			if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
+			File dest=jfc.getSelectedFile();
+			directory=jfc.getCurrentDirectory();
+
+			Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
+			setCursor(hourglassCursor);
+			postStatus(Dict.get("core.handleexport.saving")); // No idea why this does not show!
+			repaint();
+			IO.exportDeoptimized(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
 			postStatus(Dict.get("core.handleexport.finished"));
 			hourglassCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 			setCursor(hourglassCursor);
@@ -533,6 +574,9 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	}
 
 	public void handlePlayPause() {
+		onionButton.setSelected(false);
+		display.getCanvas().setOnionskin(false);
+		
 		try {
 			if (play.isEnabled()) {
 				player = new Player(seq, 0);

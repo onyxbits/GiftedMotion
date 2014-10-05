@@ -60,7 +60,7 @@ MouseListener, MouseMotionListener {
 		BufferedImage previous = new BufferedImage(size.width,size.height,BufferedImage.TYPE_INT_ARGB);
 
 		for(int i=0;i<seq.frames.length;i++) {
-			//Well this is confusing.
+			//Well, this is confusing.
 			if ((!onionskinEnabled) || (onionskinEnabled && seq.selected != seq.frames[i]))
 				seq.frames[i].paint(g);
 			else if (i > 0)
@@ -96,22 +96,6 @@ MouseListener, MouseMotionListener {
 				}
 			}
 		}
-		
-//		else //Onionskin
-//		{
-//			SingleFrame prev = null;
-//			for (int i=0; i < seq.frames.length; i++)
-//				if (seq.frames[i]==seq.selected && i > 0) prev = seq.frames[i-1];
-//
-//			Graphics2D g2d = (Graphics2D)g;
-//			if (prev != null)
-//			{
-//	            prev.paint(g2d);
-//	            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.5f));
-//			}
-//			seq.selected.paint(g2d);
-//			g2d.dispose();
-//		}
 	}
 
 	public Dimension getPreferredSize() { return seq.getExpansion(); }
