@@ -17,5 +17,10 @@ Differences than Vanilla Version
 * Removed crufy languages that really aren't necessary.
 * Fixed annoying bug in the sequence editor
 * Added drag-n-drop from the filesystem
-* Added a tool system and rotation of images.
+* Added a tool system
+* Rotate tool
+* Resize tool
+* Image deoptimizer
+* Crippledly loads malformed gifs, whereas the original doesn't at all
+* Onionskinner (userful for creating stabilizations)
 * More things that I've forgotten.
