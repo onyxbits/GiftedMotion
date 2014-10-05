@@ -1,14 +1,27 @@
-GiftedMotion
+GiftedMotion 1.5
 ============
+![Giftedmotiion](http://i.imgur.com/obuzBzt.png "Next generation")
 
 Introduction
 ============
 
 This simply is a "better version" of the old GiftedMotion animator program, created by OnyxBits. 
 
-Eventually this'll develop into more of a "Version 2.0" of GiftedMotion, through slow additions. I think the ultimate goal is to create an applet version and perhaps specialize the software to "Gif Stabilizations" that have become popular on reddit, since an onionskin feature + rotation is much easier to do in GiftedMotion than anything else I've found that's also free.
+Eventually this'll develop into more of a "Version 2.0" of GiftedMotion, through slow additions. I think the ultimate goal is to create an applet version and perhaps specialize the software to gif editing and compositing, rather than the original purpose of simply compiling gifs from files.
 
-Differences than Vanilla Version
+To Do
+=====
+* Add JMF or something so it can decode videos to gif
+* Add a youtube downloader, in conjunction with the aforementioned decoder
+* Maybe add an image editor (ganked from someone else's project), though that could be outsourced to the OS default.
+* 3D? Ehhh.. nah.
+* Load multiple projects in one workspace and allow copying of frames
+* Get a faster gif encoder, holy crap.
+* Get a less buggy gif decoder, amazingly Java's bulit in one is rubbish.
+* Create an in-browser applet (or webstart)
+* Probably overkill but allow publication directly to reddit or imgur
+
+Differences from Vanilla Version
 =================
 
 * Windows can't float away, forever unusable
