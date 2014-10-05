@@ -670,8 +670,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 
 	public static void main(String args[]) {
-		//if (MacOSCompat.isMacOSX())
-			//MacOSCompat.setAppIcon(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
+		if (MacOSCompat.isMacOSX())
+		{
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			MacOSCompat.setAppIcon(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
+		}
 		
 		new Dict();
 		app = new Core();
@@ -683,9 +686,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		app.setVisible(true);
 		app.addWindowListener(app);
 
-		// If commandlinearguments are given, try to load them as files
-		// This feature is intended for developer use and may change or go
-		// away in future versions.
+		// If commandlinearguments are given, try to load them as files. This isn't going away.
 		if (args!=null && args.length!=0) {
 			File[] f = new File[args.length];
 			for (int i=0;i<args.length;i++) {
@@ -743,7 +744,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 			for (DataFlavor flavor : flavors) {
 				if (flavor.isFlavorJavaFileListType()) {
-					
 					@SuppressWarnings("unchecked")
 					List<File> files = (List<File>)transferable.getTransferData(flavor);
 

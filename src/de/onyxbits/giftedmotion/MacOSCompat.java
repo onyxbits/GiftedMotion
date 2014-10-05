@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.awt.Window;
 import java.lang.reflect.Method;
 
-import com.apple.eawt.Application;
+//import com.apple.eawt.Application;
 
 public class MacOSCompat
 {
@@ -29,8 +29,9 @@ public class MacOSCompat
 	
 	public static void setAppIcon(Image i)
 	{
-		Application application = Application.getApplication();
-		application.setDockIconImage(i);
+		//Leave it out for now.
+		//Application application = Application.getApplication();
+		//application.setDockIconImage(i);
 	}
 	
 	
