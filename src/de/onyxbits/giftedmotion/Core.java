@@ -113,6 +113,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	private JToggleButton rotateButton = new JToggleButton(IO.createIcon("Misc/Rotate.png", Dict.get("core.rotatetool")));
 	
 	/**
+	 * Resize tool
+	 */
+	private JToggleButton resizeButton = new JToggleButton(IO.createIcon("Misc/Resize.png", Dict.get("core.scaletool")));
+	
+	/**
 	 * Sequence Editor
 	 */
 	private SequenceEditor seqedit;
@@ -157,11 +162,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	 */
 	private ButtonGroup toolGroup = new ButtonGroup();
 	
-	/**
-	 * RotateTool saves state
-	 */
-	private RotateTool rotateTool = new RotateTool();
-	
 	
 	/**
 	 * Construct a new instance of the program. There may only be one object
@@ -192,6 +192,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		close.addActionListener(this);
 		dragButton.addActionListener(this);
 		rotateButton.addActionListener(this);
+		resizeButton.addActionListener(this);
 
 		// Fancy stuff
 		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,ActionEvent.CTRL_MASK));
@@ -205,6 +206,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		togglesettings.setToolTipText(((ImageIcon)togglesettings.getIcon()).getDescription());
 		record.setToolTipText(((ImageIcon)record.getIcon()).getDescription());
 		dragButton.setToolTipText(((ImageIcon)(dragButton.getIcon())).getDescription());
+		resizeButton.setToolTipText(((ImageIcon)(resizeButton.getIcon())).getDescription());
 		rotateButton.setToolTipText(((ImageIcon)(rotateButton.getIcon())).getDescription());
 		
 		pause.setEnabled(false);
@@ -249,9 +251,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 		toolGroup.add(dragButton);
 		toolGroup.add(rotateButton);
+		toolGroup.add(resizeButton);
 		
 		tbar.add(dragButton);
 		tbar.add(rotateButton);
+		tbar.add(resizeButton);
 		
 		dragButton.setSelected(true);
 		
@@ -286,6 +290,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		dragButton.setEnabled(true);
 		rotateButton.setEnabled(true);
 		closeButton.setEnabled(true);
+		resizeButton.setEnabled(true);
 	}
 	
 	public void disableButtons()
@@ -299,6 +304,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		dragButton.setEnabled(false);
 		rotateButton.setEnabled(false);
 		closeButton.setEnabled(false);
+		resizeButton.setEnabled(false);
 	}
 
 	public void windowClosing(WindowEvent e) { handleQuit(); }
@@ -325,7 +331,8 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		if (src == togglesettings ) handleTogglesettings();
 		if (src == close || src == closeButton) handleClose();
 		if (src == dragButton) display.getCanvas().setTool(new DragTool());
-		if (src == rotateButton) display.getCanvas().setTool(rotateTool);
+		if (src == rotateButton) display.getCanvas().setTool(new RotateTool());
+		if (src == resizeButton) display.getCanvas().setTool(new ScaleTool());
 	}
 
 	public void componentHidden(ComponentEvent e) {}
@@ -417,7 +424,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		}
 		
 		dragButton.setSelected(true);
-		rotateTool = new RotateTool();
 	}
 
 	public void handleExtract() {
@@ -680,7 +686,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			enableButtons();
 			
 			dragButton.setSelected(true);
-			rotateTool = new RotateTool();
 
 			dtde.dropComplete(true);
 		} catch (IOException | UnsupportedFlavorException e) {}

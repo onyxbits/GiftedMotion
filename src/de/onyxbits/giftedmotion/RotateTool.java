@@ -17,7 +17,7 @@ public class RotateTool extends TransformTool
 	@Override
 	public String getStatus(SingleFrame img)
 	{
-		Double[] status = {Math.toDegrees(img.rotationDegrees)};
+		Double[] status = {Math.toDegrees(img.rotationDegrees) % 360};
 		return Dict.get("core.imagerotated", status);
 	}
 
@@ -27,6 +27,7 @@ public class RotateTool extends TransformTool
 		lastRotationDeg = img.rotationDegrees;
 		transform(img, mousePos);
 		endTransform(img, mousePos);
+		transform(img, mousePos);
 	}
 
 	@Override

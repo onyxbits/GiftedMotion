@@ -26,6 +26,11 @@ public class SingleFrame  {
   protected double rotationDegrees = 0;
   
   /**
+   * Scale amount (in times)
+   */
+  protected float scaleX, scaleY;
+  
+  /**
    * How long to show this frame in the final animation (in ms).
    */
   protected int showtime=100;
@@ -55,6 +60,9 @@ public class SingleFrame  {
     this.raw=raw;
     this.name=name;
     position=new Point(0,0);
+    
+    scaleX = raw.getWidth();
+    scaleY = raw.getHeight();
   }
 
   /**
@@ -67,6 +75,8 @@ public class SingleFrame  {
     rotationDegrees = frame.rotationDegrees;
     position=new Point(frame.position);
     showtime=frame.showtime;
+    scaleX = frame.scaleX;
+    scaleY = frame.scaleY;
   }
   
   /**
@@ -88,17 +98,15 @@ public class SingleFrame  {
    * @param g the grpahics object to render to
    */
   public void paint(Graphics g) {
-	  if (rotationDegrees != 0) 
-	  {
 		  Graphics2D g2 = (Graphics2D)g;
 		  AffineTransform at = new AffineTransform();
+		  at.scale(scaleX/raw.getWidth(), scaleY/raw.getHeight());
 		  at.translate(raw.getWidth()/2, raw.getHeight()/2);
 		  at.rotate(rotationDegrees);//Math.toRadians(rotationDegrees));
 		  at.translate(-raw.getWidth()/2, -raw.getHeight()/2);
+		  
 		  //at.translate(-position.x, -position.y);
 		  g2.drawImage(raw, new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR), position.x, position.y);
-	  }
-	  else g.drawImage(raw,position.x,position.y,null);
   }
   
   /**

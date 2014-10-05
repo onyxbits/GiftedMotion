@@ -5,10 +5,16 @@ import java.awt.Point;
 public abstract class TransformTool
 {
 	protected Point offset;
+	protected boolean shiftPressed;
 	
 	public void setOffset(Point mousePos)
 	{
 		this.offset = mousePos;
+	}
+	
+	public void setShiftPressed(boolean shi)
+	{
+		shiftPressed = shi;
 	}
 	
 	public abstract void beginTransform(SingleFrame img, Point mousePos);

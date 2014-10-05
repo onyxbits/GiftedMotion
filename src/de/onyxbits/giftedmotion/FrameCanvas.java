@@ -24,6 +24,22 @@ MouseListener, MouseMotionListener {
     this.seq = seq;
     addMouseListener(this);
     addMouseMotionListener(this);
+    
+    addKeyListener(new KeyAdapter() {
+
+        @Override
+        public void keyPressed(KeyEvent ke) {
+            if (ke.getKeyCode() == KeyEvent.VK_SHIFT) 
+                tool.setShiftPressed(true);
+        }
+        
+        @Override
+        public void keyReleased(KeyEvent ke)
+        {
+        	if (ke.getKeyCode() == KeyEvent.VK_SHIFT)
+        		tool.setShiftPressed(false);
+        }
+    });
   }
   
   public void paintComponent(Graphics g) {
