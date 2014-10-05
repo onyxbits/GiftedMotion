@@ -1,12 +1,12 @@
 GiftedMotion
 ============
 
-Java GIF animator
-
 Introduction
 ============
 
-This simply is a "better version" of the old GiftedMotion animator program, created by OnyxBits. Eventually this'll develop into more of a "Version 2.0" of GiftedMotion, through slow additions. I think the ultimate goal is to create an applet version and perhaps specialize the software to "Gif Stabilizations" that have become popular on reddit, since an onionskin feature + rotation is much easier to do in GiftedMotion than anything else (free) I've found.
+This simply is a "better version" of the old GiftedMotion animator program, created by OnyxBits. 
+
+Eventually this'll develop into more of a "Version 2.0" of GiftedMotion, through slow additions. I think the ultimate goal is to create an applet version and perhaps specialize the software to "Gif Stabilizations" that have become popular on reddit, since an onionskin feature + rotation is much easier to do in GiftedMotion than anything else I've found that's also free.
 
 Differences than Vanilla Version
 =================
