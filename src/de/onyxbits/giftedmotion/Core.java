@@ -85,7 +85,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	/**
 	 * Record (same as export)
 	 */
-	private JButton record = new JButton(IO.createIcon("Tango/22x22/actions/media-record.png",Dict.get("core.record")));
+	private JButton record = new JButton(IO.createIcon("Tango/22x22/actions/document-save.png",Dict.get("core.record")));
 
 	/**
 	 * Import (same as load)
@@ -116,6 +116,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	 * Resize tool
 	 */
 	private JToggleButton resizeButton = new JToggleButton(IO.createIcon("Misc/Resize.png", Dict.get("core.scaletool")));
+	
+	/**
+	 * Onionskin button
+	 */
+	private JToggleButton onionButton = new JToggleButton(IO.createIcon("Misc/onion.png", Dict.get("core.onion")));
 	
 	/**
 	 * Sequence Editor
@@ -193,6 +198,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		dragButton.addActionListener(this);
 		rotateButton.addActionListener(this);
 		resizeButton.addActionListener(this);
+		onionButton.addActionListener(this);
 
 		// Fancy stuff
 		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,ActionEvent.CTRL_MASK));
@@ -208,6 +214,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		dragButton.setToolTipText(((ImageIcon)(dragButton.getIcon())).getDescription());
 		resizeButton.setToolTipText(((ImageIcon)(resizeButton.getIcon())).getDescription());
 		rotateButton.setToolTipText(((ImageIcon)(rotateButton.getIcon())).getDescription());
+		onionButton.setToolTipText(((ImageIcon)(onionButton.getIcon())).getDescription());
 		
 		pause.setEnabled(false);
 		status.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -215,10 +222,10 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		// Build menus
 		JMenu file = new JMenu(Dict.get("core.core.file"));
 		file.add(load);
+		file.add(export);
 		file.add(close);
 		file.add(new JSeparator());
 		file.add(extract);
-		file.add(export);
 		file.add(new JSeparator());
 		file.add(quit);
 
@@ -240,13 +247,13 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		tbar.setRollover(true);
 		tbar.setFloatable(true);
 		tbar.add(open);
+		tbar.add(record);
 		tbar.add(closeButton);
 		tbar.add(togglesettings);
 
 		tbar.addSeparator();
 		tbar.add(play);
 		tbar.add(pause);
-		tbar.add(record);
 		tbar.addSeparator();
 
 		toolGroup.add(dragButton);
@@ -256,6 +263,9 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		tbar.add(dragButton);
 		tbar.add(rotateButton);
 		tbar.add(resizeButton);
+		tbar.addSeparator();
+
+		tbar.add(onionButton);
 		
 		dragButton.setSelected(true);
 		
@@ -291,6 +301,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		rotateButton.setEnabled(true);
 		closeButton.setEnabled(true);
 		resizeButton.setEnabled(true);
+		onionButton.setEnabled(true);
 	}
 	
 	public void disableButtons()
@@ -305,6 +316,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		rotateButton.setEnabled(false);
 		closeButton.setEnabled(false);
 		resizeButton.setEnabled(false);
+		onionButton.setEnabled(false);
 	}
 
 	public void windowClosing(WindowEvent e) { handleQuit(); }
@@ -333,6 +345,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		if (src == dragButton) display.getCanvas().setTool(new DragTool());
 		if (src == rotateButton) display.getCanvas().setTool(new RotateTool());
 		if (src == resizeButton) display.getCanvas().setTool(new ScaleTool());
+		if (src == onionButton) display.getCanvas().setOnionskin(onionButton.isSelected());
 	}
 
 	public void componentHidden(ComponentEvent e) {}
@@ -423,7 +436,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			exp.printStackTrace();
 		}
 		
-		dragButton.setSelected(true);
+		finally
+		{
+			dragButton.setSelected(true);
+			onionButton.setSelected(false);
+		}
 	}
 
 	public void handleExtract() {
@@ -686,6 +703,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			enableButtons();
 			
 			dragButton.setSelected(true);
+			onionButton.setSelected(false);
 
 			dtde.dropComplete(true);
 		} catch (IOException | UnsupportedFlavorException e) {}

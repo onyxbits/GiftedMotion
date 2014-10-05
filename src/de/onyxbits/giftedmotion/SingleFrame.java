@@ -100,12 +100,11 @@ public class SingleFrame  {
   public void paint(Graphics g) {
 		  Graphics2D g2 = (Graphics2D)g;
 		  AffineTransform at = new AffineTransform();
-		  at.scale(scaleX/raw.getWidth(), scaleY/raw.getHeight());
-		  at.translate(raw.getWidth()/2, raw.getHeight()/2);
-		  at.rotate(rotationDegrees);//Math.toRadians(rotationDegrees));
-		  at.translate(-raw.getWidth()/2, -raw.getHeight()/2);
+		  at.translate(scaleX/2, scaleY/2);
+		  at.rotate(rotationDegrees);
+		  at.translate(-scaleX/2, -scaleY/2);
 		  
-		  //at.translate(-position.x, -position.y);
+		  at.scale(scaleX/raw.getWidth(), scaleY/raw.getHeight());
 		  g2.drawImage(raw, new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR), position.x, position.y);
   }
   

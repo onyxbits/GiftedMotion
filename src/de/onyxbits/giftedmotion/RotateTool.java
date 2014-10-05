@@ -9,8 +9,8 @@ public class RotateTool extends TransformTool
 	@Override
 	public void transform(SingleFrame img, Point mousePos)
 	{
-		int x = mousePos.x-img.position.x-(img.raw.getWidth()/2);
-		int y = mousePos.y-img.position.y-(img.raw.getHeight()/2);
+		float x = mousePos.x-img.position.x-(img.scaleX/2);
+		float y = mousePos.y-img.position.y-(img.scaleY/2);
 		if (x != 0) img.rotationDegrees = Math.atan2(y, x) - lastRotationDeg;
 	}
 	
