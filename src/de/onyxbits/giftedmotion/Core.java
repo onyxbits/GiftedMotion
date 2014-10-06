@@ -513,10 +513,16 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		BufferedImage outputBuf = new BufferedImage((int)size.getWidth(), (int)size.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		for (int i=0;i<seq.frames.length;i++) {
 			Graphics g = outputBuf.getGraphics();
-			seq.frames[i].paint(g);
-			g.dispose();
-			seq.frames[i].raw = Util.copyImage(outputBuf);
+			SingleFrame f = seq.frames[i];
+			f.paint(g);
+			f.raw = Util.copyImage(outputBuf);
+			
+			//Change all gif loaded settings to how it would be rendered
+			f.position = new Point(0, 0);
+			f.scaleX = (int)size.getWidth();
+			f.scaleY = (int)size.getHeight();
 		}
+		
 		
 //		try {
 //			postStatus("");

@@ -127,6 +127,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     buttons.add(duplicate);
     buttons.add(delete);
     
+    //frlst.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     order.add(new JScrollPane(frlst));
     order.add(buttons);
     
