@@ -19,11 +19,21 @@ MouseListener, MouseMotionListener {
 	 * Onionskin boolean
 	 */
 	private boolean onionskinEnabled = false;
-
+	
 	/**
-	 * The tool used for transforming the 
+	 * The tool used for transforming the selected image
 	 */
 	private TransformTool tool = new DragTool();
+	
+	/**
+	 * Thread for flickering
+	 */
+	private FlickerThread flickerThread = new FlickerThread();
+	
+	/**
+	 * Boolean to indicate which flickered image to show
+	 */
+	private boolean flickerShow = false;
 
 	public FrameCanvas(FrameSequence seq) {
 		this.seq = seq;
@@ -61,16 +71,19 @@ MouseListener, MouseMotionListener {
 
 		for(int i=0;i<seq.frames.length;i++) {
 			//Well, this is confusing.
-			if ((!onionskinEnabled) || (onionskinEnabled && seq.selected != seq.frames[i]))
+			if ((!onionskinEnabled) || (onionskinEnabled && seq.selected != seq.frames[i])) //Paint normally
 				seq.frames[i].paint(g);
-			else if (i > 0)
+			else if (i > 0) //Paint the onionskinned frame
 			{
 				Graphics2D g2d = (Graphics2D)g;
 				seq.frames[i-1].paint(g2d);
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
 				seq.selected.paint(g2d);
-			} else seq.selected.paint(g);
+			} 
+			else seq.selected.paint(g); //No previous frame, just paint normally
 
+			
+			
 			// Only draw the sequence up to the selected frame
 			// FIXME: This is utterly inefficient!
 			if (seq.frames[i]==seq.selected) break;
@@ -113,6 +126,20 @@ MouseListener, MouseMotionListener {
 	{
 		onionskinEnabled = on;
 		repaint();
+	}
+	
+	public void setFlicker(boolean fli)
+	{
+		if (fli) 
+		{
+			flickerThread = new FlickerThread();
+			flickerThread.start();
+		}
+		else 
+		{
+			flickerShow = false;
+			flickerThread = null;
+		}
 	}
 
 	public TransformTool getTool()

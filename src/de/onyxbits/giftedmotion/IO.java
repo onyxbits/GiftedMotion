@@ -123,14 +123,14 @@ public class IO {
 		e.setQuality(opt.quality);
 		e.setTransparent(opt.transparent);
 		BufferedImage outputBuf = new BufferedImage((int)size.getWidth(), (int)size.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = outputBuf.getGraphics();
 		for (int i=0;i<seq.frames.length;i++) {
 			e.setDelay(seq.frames[i].showtime);
 			e.setDispose(seq.frames[i].dispose); //Redraw background
-			Graphics g = outputBuf.getGraphics();
 			seq.frames[i].paint(g);
-			g.dispose();
 			e.addFrame(outputBuf);
 		}
+		g.dispose();
 		e.finish();
 	}
 
@@ -140,12 +140,13 @@ public class IO {
 	 * @param dir base directory
 	 * @throws IOException on error
 	 */
-	public static void extract(FrameSequence seq, File dir) throws IOException {
+	public static void extract(FrameSequence seq, File dir, Dimension size, Settings opt) throws IOException {
 		for (int i=0;i<seq.frames.length;i++) {
 			File f = new File(dir,seq.frames[i].toString());
 			String[] tmp = seq.frames[i].toString().split("\\.");
 			String format = tmp[tmp.length-1].toLowerCase();
-			ImageIO.write(seq.frames[i].raw,format,f);
+			//ImageIO.write(seq.frames[i].raw,format,f);
+			ImageIO.write(seq.frames[i].exportFrame(size,opt.transparent),format,f);
 		}
 	}
 

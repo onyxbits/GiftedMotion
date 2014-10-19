@@ -403,6 +403,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		try {
 			postStatus(Dict.get("core.handleload.hint"));
 			LoadAccessory loadAccessory = new LoadAccessory();
+			
 			JFileChooser jfc = new JFileChooser(directory);
 			jfc.setMultiSelectionEnabled(true);
 			jfc.setAccessory(loadAccessory);
@@ -464,10 +465,10 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		try {
 			JFileChooser jfc = new JFileChooser(directory);
 			jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			jfc.setAcceptAllFileFilterUsed(false);
 			if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
-			File dest=jfc.getSelectedFile();
 			directory=jfc.getCurrentDirectory();
-			IO.extract(seq,dest);
+			IO.extract(seq, directory, display.getCanvas().getSize(), setedit.getSettings());
 			postStatus(Dict.get("core.handleextract.saved"));
 		}
 		catch (IOException e) {
@@ -682,10 +683,22 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			MacOSCompat.setAppIcon(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
 		}
 		
+		try
+		{
+			UIManager.setLookAndFeel(
+			        UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		new Dict();
 		app = new Core();
 		app.setSize(new Dimension(800,600));
 		app.setTitle(VERSION);
+		app.setLocationRelativeTo(null);
 
 		CatchOldJava.decorateWindow(app);
 
