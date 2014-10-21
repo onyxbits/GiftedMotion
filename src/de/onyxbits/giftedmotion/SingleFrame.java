@@ -26,7 +26,7 @@ public class SingleFrame  {
   protected double rotationDegrees = 0;
   
   /**
-   * Scale amount (in times)
+   * Scale amount (basically just scaled dimensions)
    */
   protected float scaleX, scaleY;
   

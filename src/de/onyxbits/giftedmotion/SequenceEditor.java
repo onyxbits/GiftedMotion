@@ -38,6 +38,21 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
   private JSpinner yoff = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1));
   
   /**
+   * Rotation degrees
+   */
+  private JSpinner rotation = new JSpinner(new SpinnerNumberModel(0,-360,360,0.01));
+  
+  /**
+   * Scale X
+   */
+  private JSpinner scaleX = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1f));
+  
+  /**
+   * Scale Y
+   */
+  private JSpinner scaleY = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1f));
+  
+  /**
    * Peer for SingleFrame.showtime
    */
   private JSpinner showtime = new JSpinner(new SpinnerNumberModel(100,1,1000000,10));
@@ -96,6 +111,9 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     showtime.addChangeListener(this);
     xoff.addChangeListener(this);
     yoff.addChangeListener(this);
+    rotation.addChangeListener(this);
+    scaleX.addChangeListener(this);
+    scaleY.addChangeListener(this);
     
     addMouseListener(this);
     
@@ -108,6 +126,9 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     showtime.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.showtime"));
     xoff.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.xoff"));
     yoff.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.yoff"));
+    scaleX.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.scaleX"));
+    scaleY.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.scaleY"));
+    rotation.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.rotation"));
     
     dataChanged(seq);
   }
@@ -147,10 +168,13 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
 */
 
 
-    JLabel label0 = new JLabel(Dict.get("sequenceeditor.getcontent.showtime"));
-    JLabel label1 = new JLabel(Dict.get("sequenceeditor.getcontent.dispose"));
-    JLabel label2 = new JLabel(Dict.get("sequenceeditor.getcontent.xoff")); 
-    JLabel label3 = new JLabel(Dict.get("sequenceeditor.getcontent.yoff"));
+    JLabel showtimeLabel = new JLabel(Dict.get("sequenceeditor.getcontent.showtime"));
+    JLabel disposeLabel = new JLabel(Dict.get("sequenceeditor.getcontent.dispose"));
+    JLabel xoffLabel = new JLabel(Dict.get("sequenceeditor.getcontent.xoff")); 
+    JLabel yoffLabel = new JLabel(Dict.get("sequenceeditor.getcontent.yoff"));
+    JLabel scaleXLabel = new JLabel(Dict.get("sequenceeditor.getcontent.scaleX"));
+    JLabel scaleYLabel = new JLabel(Dict.get("sequenceeditor.getcontent.scaleY"));
+    JLabel rotationLabel = new JLabel(Dict.get("sequenceeditor.getcontent.rotation"));
     
     JPanel settings = new JPanel();
     GridBagLayout gbl = new GridBagLayout();
@@ -159,7 +183,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     GridBagConstraints gbc = new GridBagConstraints();
 
 
-    // Component: label0
+    // Component: showtimeLabel
     gbc.gridx = 0;
     gbc.gridy = 0;
     gbc.gridwidth = 1;
@@ -171,8 +195,8 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbc.ipadx = 0;
     gbc.ipady = 0;
     gbc.insets = new Insets(0,1,1,10);
-    gbl.setConstraints(label0,gbc);
-    settings.add(label0);
+    gbl.setConstraints(showtimeLabel,gbc);
+    settings.add(showtimeLabel);
 
     // Component: showtime
     gbc.gridx = 1;
@@ -189,7 +213,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbl.setConstraints(showtime,gbc);
     settings.add(showtime);
 
-    // Component: label1
+    // Component: disposeLabel
     gbc.gridx = 0;
     gbc.gridy = 1;
     gbc.gridwidth = 1;
@@ -201,8 +225,8 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbc.ipadx = 0;
     gbc.ipady = 0;
     gbc.insets = new Insets(0,1,1,10);
-    gbl.setConstraints(label1,gbc);
-    settings.add(label1);
+    gbl.setConstraints(disposeLabel,gbc);
+    settings.add(disposeLabel);
 
     // Component: dispose
     gbc.gridx = 1;
@@ -219,7 +243,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbl.setConstraints(dispose,gbc);
     settings.add(dispose);
 
-    // Component: label2
+    // Component: xoffLabel
     gbc.gridx = 0;
     gbc.gridy = 2;
     gbc.gridwidth = 1;
@@ -231,8 +255,8 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbc.ipadx = 0;
     gbc.ipady = 0;
     gbc.insets = new Insets(0,1,1,10);
-    gbl.setConstraints(label2,gbc);
-    settings.add(label2);
+    gbl.setConstraints(xoffLabel,gbc);
+    settings.add(xoffLabel);
 
     // Component: xoff
     gbc.gridx = 1;
@@ -249,7 +273,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbl.setConstraints(xoff,gbc);
     settings.add(xoff);
 
-    // Component: label3
+    // Component: yoffLabel
     gbc.gridx = 0;
     gbc.gridy = 3;
     gbc.gridwidth = 1;
@@ -261,8 +285,8 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbc.ipadx = 0;
     gbc.ipady = 0;
     gbc.insets = new Insets(0,1,1,10);
-    gbl.setConstraints(label3,gbc);
-    settings.add(label3);
+    gbl.setConstraints(yoffLabel,gbc);
+    settings.add(yoffLabel);
 
     // Component: yoff
     gbc.gridx = 1;
@@ -279,9 +303,99 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbl.setConstraints(yoff,gbc);
     settings.add(yoff);
 
-    // Component: apply
+ // Component: scaleXLabel
     gbc.gridx = 0;
     gbc.gridy = 4;
+    gbc.gridwidth = 1;
+    gbc.gridheight = 1;
+    gbc.weightx = 0.0;
+    gbc.weighty = 0.0;
+    gbc.anchor = GridBagConstraints.NORTHWEST;
+    gbc.fill = GridBagConstraints.NONE;
+    gbc.ipadx = 0;
+    gbc.ipady = 0;
+    gbc.insets = new Insets(0,1,1,10);
+    gbl.setConstraints(scaleXLabel,gbc);
+    settings.add(scaleXLabel);
+
+    // Component: scaleX
+    gbc.gridx = 1;
+    gbc.gridy = 4;
+    gbc.gridwidth = 1;
+    gbc.gridheight = 1;
+    gbc.weightx = 0.0;
+    gbc.weighty = 0.0;
+    gbc.anchor = GridBagConstraints.CENTER;
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.ipadx = 0;
+    gbc.ipady = 0;
+    gbc.insets = new Insets(0,1,1,1);
+    gbl.setConstraints(scaleX,gbc);
+    settings.add(scaleX);
+    
+    // Component: scaleYLabel
+   gbc.gridx = 0;
+   gbc.gridy = 5;
+   gbc.gridwidth = 1;
+   gbc.gridheight = 1;
+   gbc.weightx = 0.0;
+   gbc.weighty = 0.0;
+   gbc.anchor = GridBagConstraints.NORTHWEST;
+   gbc.fill = GridBagConstraints.NONE;
+   gbc.ipadx = 0;
+   gbc.ipady = 0;
+   gbc.insets = new Insets(0,1,1,10);
+   gbl.setConstraints(scaleYLabel,gbc);
+   settings.add(scaleYLabel);
+
+   // Component: scaleY
+   gbc.gridx = 1;
+   gbc.gridy = 5;
+   gbc.gridwidth = 1;
+   gbc.gridheight = 1;
+   gbc.weightx = 0.0;
+   gbc.weighty = 0.0;
+   gbc.anchor = GridBagConstraints.CENTER;
+   gbc.fill = GridBagConstraints.BOTH;
+   gbc.ipadx = 0;
+   gbc.ipady = 0;
+   gbc.insets = new Insets(0,1,1,1);
+   gbl.setConstraints(scaleY,gbc);
+   settings.add(scaleY);
+    
+ // Component: rotationLabel
+    gbc.gridx = 0;
+    gbc.gridy = 6;
+    gbc.gridwidth = 1;
+    gbc.gridheight = 1;
+    gbc.weightx = 0.0;
+    gbc.weighty = 0.0;
+    gbc.anchor = GridBagConstraints.NORTHWEST;
+    gbc.fill = GridBagConstraints.NONE;
+    gbc.ipadx = 0;
+    gbc.ipady = 0;
+    gbc.insets = new Insets(0,1,1,10);
+    gbl.setConstraints(rotationLabel,gbc);
+    settings.add(rotationLabel);
+
+    // Component: rotation
+    gbc.gridx = 1;
+    gbc.gridy = 6;
+    gbc.gridwidth = 1;
+    gbc.gridheight = 1;
+    gbc.weightx = 0.0;
+    gbc.weighty = 0.0;
+    gbc.anchor = GridBagConstraints.CENTER;
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.ipadx = 0;
+    gbc.ipady = 0;
+    gbc.insets = new Insets(0,1,1,1);
+    gbl.setConstraints(rotation,gbc);
+    settings.add(rotation);
+
+    // Component: apply
+    gbc.gridx = 0;
+    gbc.gridy = 7;
     gbc.gridwidth = 2;
     gbc.gridheight = 1;
     gbc.weightx = 100.0;
@@ -293,9 +407,6 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     gbc.insets = new Insets(12,1,1,1);
     gbl.setConstraints(apply,gbc);
     settings.add(apply);
-
-
-
     
     JPanel content = new JPanel();
     content.setLayout(new BoxLayout(content,BoxLayout.Y_AXIS));
@@ -367,6 +478,35 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
       else seq.selected.position=val;
       seq.fireDataChanged();
     }
+    
+    if (src==rotation)
+    {
+    	double rot = ((Double)rotation.getModel().getValue()).doubleValue();
+    	if (apply.isSelected())
+    		for (int i = 0; i < seq.frames.length; i++)
+    			seq.frames[i].rotationDegrees = rot;
+    	else seq.selected.rotationDegrees = rot;
+    	
+    	seq.fireDataChanged();
+    }
+    
+    if (src == scaleX || src == scaleY)
+    {
+    	float sx = ((Double)scaleX.getValue()).floatValue();
+    	float sy = ((Double)scaleY.getValue()).floatValue();
+    	if (apply.isSelected())
+    		for (int i = 0; i < seq.frames.length; i++)
+    		{
+    			seq.frames[i].scaleX = sx;
+    			seq.frames[i].scaleY = sy;
+    		}
+    	else
+    	{
+    		seq.selected.scaleX = sx;
+    		seq.selected.scaleY = sy;
+    	}
+    	seq.fireDataChanged();
+    }
   }
   
   public void dataChanged(FrameSequence src) {
@@ -376,7 +516,9 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     showtime.removeChangeListener(this);
     xoff.removeChangeListener(this);
     yoff.removeChangeListener(this);
-    
+    rotation.removeChangeListener(this);
+    scaleX.removeChangeListener(this);
+    scaleY.removeChangeListener(this);
     
     frlst.setListData(seq.frames);
     frlst.setSelectedValue(src.selected,true);
@@ -385,6 +527,9 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
       showtime.setValue(new Integer(src.selected.showtime));
       xoff.setValue(new Integer(src.selected.position.x));
       yoff.setValue(new Integer(src.selected.position.y));
+      scaleX.setValue(new Double(src.selected.scaleX));
+      scaleY.setValue(new Double(src.selected.scaleY));
+      rotation.setValue(new Double(src.selected.rotationDegrees));
     }
     
     frlst.addListSelectionListener(this);
@@ -393,6 +538,9 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     showtime.addChangeListener(this);
     xoff.addChangeListener(this);
     yoff.addChangeListener(this);
+    rotation.addChangeListener(this);
+    scaleX.addChangeListener(this);
+    scaleY.addChangeListener(this);
   }
   
   

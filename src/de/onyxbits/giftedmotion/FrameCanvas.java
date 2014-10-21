@@ -161,6 +161,7 @@ MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		if (seq.selected==null) return;
 		seq.fireDataChanged();
 		tool.endTransform(seq.selected, e.getPoint());
 	}

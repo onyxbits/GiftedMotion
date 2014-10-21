@@ -33,6 +33,8 @@ public class RotateTool extends TransformTool
 	@Override
 	public void endTransform(SingleFrame img, Point mousePos)
 	{
+		System.out.println(img);
+		System.out.println(mousePos);
 		lastRotationDeg = img.rotationDegrees;
 	}
 
