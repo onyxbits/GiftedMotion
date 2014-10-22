@@ -645,8 +645,8 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 	public static void main(String args[]) {
 		//Register TGA plugin
-		IIORegistry registry = IIORegistry.getDefaultInstance();
-		registry.registerServiceProvider(new com.realityinteractive.imageio.tga.TGAImageReaderSpi());
+		//IIORegistry registry = IIORegistry.getDefaultInstance();
+		//registry.registerServiceProvider(new com.realityinteractive.imageio.tga.TGAImageReaderSpi());
 		
 		if (MacOSCompat.isMacOSX())
 		{
@@ -654,7 +654,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			MacOSCompat.setAppIcon(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
 		}
 		
-		try
+		/*try
 		{
 			UIManager.setLookAndFeel(
 			        UIManager.getSystemLookAndFeelClassName());
@@ -663,7 +663,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		new Dict();
 		app = new Core();
