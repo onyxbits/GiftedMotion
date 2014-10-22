@@ -1,6 +1,6 @@
 <project name="giftedmotion" default="dist">
 
-<property name="version" value="1.5" />
+<property name="version" value="1.5.2" />
 
 <target name="dist" depends="clean, compile, bundle" />
 

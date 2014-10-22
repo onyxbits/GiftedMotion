@@ -399,7 +399,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		System.exit(0);
 	}
 
-	public void handleLoad() {
+	public void handleLoad() { //TODO: This should be refactored into some load function or something.
 		try {
 			postStatus(Dict.get("core.handleload.hint"));
 			LoadAccessory loadAccessory = new LoadAccessory();
@@ -428,11 +428,12 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 				postStatus(Dict.get("core.handleload.nothing"));
 				return;
 			}
-			setFrameSequence(new FrameSequence(frames));
-			if (frames.length==1) {
-				//The user probably knows what they're doing. That dialog clashed anyways.
-				//JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
-			}
+			
+			if (seq != null)
+				for (int i = 0; i < frames.length; i++)
+					seq.add(frames[i], seq.frames.length);
+			
+			else setFrameSequence(new FrameSequence(frames));
 			
 			enableButtons();
 			
@@ -771,8 +772,11 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 						postStatus(Dict.get("core.handleload.nothing"));
 						return;
 					}
-
-					setFrameSequence(new FrameSequence(frames));
+					
+					if (seq != null)
+						for (int i = 0; i < frames.length; i++)
+							seq.add(frames[i], seq.frames.length);
+					else setFrameSequence(new FrameSequence(frames));
 					
 					if (frames.length==1) {
 						//Sucks that this is just duplicated here. Probably needs refactoring
