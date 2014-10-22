@@ -1,6 +1,6 @@
 GiftedMotion 1.5
 ============
-![Giftedmotiion](http://i.imgur.com/obuzBzt.png "Next generation")
+![Giftedmotion](http://i.imgur.com/obuzBzt.png "Next generation")
 
 Introduction
 ============
@@ -11,13 +11,15 @@ Eventually this'll develop into more of a "Version 2.0" of GiftedMotion, through
 
 To Do
 =====
+* Get a new name
+* UNDO!!!!
 * Add JMF or something so it can decode videos to gif
 * Add a youtube downloader, in conjunction with the aforementioned decoder
 * Maybe add an image editor (ganked from someone else's project), though that could be outsourced to the OS default.
 * 3D? Ehhh.. nah.
 * Load multiple projects in one workspace and allow copying of frames
 * Get a faster gif encoder, holy crap.
-* Get a less buggy gif decoder, amazingly Java's bulit in one is rubbish.
+* Get a less buggy gif decoder, amazingly Java's pack-in one is rubbish.
 * Create an in-browser applet (or webstart)
 * Probably overkill but allow publication directly to reddit or imgur
 
@@ -36,4 +38,4 @@ Differences from Vanilla Version
 * Image deoptimizer
 * Crippledly loads malformed gifs, whereas the original doesn't at all
 * Onionskinner (userful for creating stabilizations)
-* More things that I've forgotten.
+* Able to add more frames during a project, instead of overwriting all of your work.
