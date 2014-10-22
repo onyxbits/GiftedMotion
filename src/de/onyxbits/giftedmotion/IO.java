@@ -36,9 +36,9 @@ public class IO {
 	 * be loaded will be represented by an errorshape.
 	 */
 	public static SingleFrame[] load(File[] files) throws IOException, FileNotFoundException, IllegalArgumentException {
-		Vector tmp = new Vector();
+		Vector<SingleFrame> tmp = new Vector<>();
 		for(int i=0;i<files.length;i++) {
-			Iterator it = ImageIO.getImageReadersBySuffix(getSuffix(files[i]));
+			Iterator<ImageReader> it = ImageIO.getImageReadersBySuffix(getSuffix(files[i]));
 			if (!it.hasNext()) throw new IllegalArgumentException(files[i].getPath());
 			ImageReader reader = (ImageReader)it.next();
 			if (reader instanceof GIFImageReader) reader = new PatchedGIFImageReader(null);

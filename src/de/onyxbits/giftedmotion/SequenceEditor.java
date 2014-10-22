@@ -10,7 +10,7 @@ import javax.swing.event.*;
  * Edit the framesequence
  */
 public class SequenceEditor extends JInternalFrame implements ActionListener,
-FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, ItemListener {
+FrameSequenceListener, ChangeListener, ListSelectionListener, ItemListener {
 
   /**
    * Dispose codes in readable form
@@ -114,8 +114,6 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     rotation.addChangeListener(this);
     scaleX.addChangeListener(this);
     scaleY.addChangeListener(this);
-    
-    addMouseListener(this);
     
     apply.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.apply"));
     sooner.setToolTipText(Dict.get("sequenceeditor.sequenceeditor.sooner"));
@@ -549,25 +547,6 @@ FrameSequenceListener, ChangeListener, ListSelectionListener, MouseListener, Ite
     seq.selected=(SingleFrame)frlst.getSelectedValue();
     seq.fireDataChanged();
   }
-
-@Override
-public void mouseReleased(MouseEvent e)
-{
-	if (getY() < 0)
-		setLocation(getX(), 0);
-}
-
-@Override
-public void mouseClicked(MouseEvent e){}
-
-@Override
-public void mousePressed(MouseEvent e){}
-
-@Override
-public void mouseEntered(MouseEvent e){}
-
-@Override
-public void mouseExited(MouseEvent e){}
 
 @Override
 public void itemStateChanged(ItemEvent e)

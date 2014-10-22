@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 /**
  * Wrapper around the actual canvas class, to glue it into the workspace
  */
-public class FrameDisplay extends JInternalFrame implements MouseListener {
+public class FrameDisplay extends JInternalFrame {
 
   /**
    * The canvas to draw upon
@@ -19,9 +19,6 @@ public class FrameDisplay extends JInternalFrame implements MouseListener {
     setFrameIcon(null);
     this.canvas=canvas;
     setContentPane(canvas);
-    
-    addMouseListener(this);
-    
     pack();
   }
   
@@ -33,22 +30,4 @@ public class FrameDisplay extends JInternalFrame implements MouseListener {
     return canvas;
   }
 
-@Override
-public void mouseClicked(MouseEvent e){}
-
-@Override
-public void mousePressed(MouseEvent e){}
-
-@Override
-public void mouseReleased(MouseEvent e)
-{
-	if (getY() < 0)
-		setLocation(getX(), 0);
-}
-
-@Override
-public void mouseEntered(MouseEvent e){}
-
-@Override
-public void mouseExited(MouseEvent e){}
 }

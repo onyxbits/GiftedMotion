@@ -14,6 +14,7 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
+import javax.imageio.spi.IIORegistry;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -288,6 +289,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		content.add(status,BorderLayout.SOUTH);
 		setContentPane(content);
 		workspace.add(setedit);
+		workspace.setDesktopManager(new BoundedDesktopManager());
 		postStatus("");
 	}
 	
@@ -437,6 +439,9 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			
 			enableButtons();
 			
+			dragButton.setSelected(true);
+			onionButton.setSelected(false);
+			display.getCanvas().setOnionskin(false);
 		}
 		catch (IllegalArgumentException exp) {
 			postStatus(Dict.get("core.handleload.illegalargumentexception",exp.getMessage()));
@@ -447,13 +452,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 		catch (Exception exp) {
 			postStatus(Dict.get("core.handleload.exception"));
 			exp.printStackTrace();
-		}
-		
-		finally
-		{
-			dragButton.setSelected(true);
-			onionButton.setSelected(false);
-			display.getCanvas().setOnionskin(false);
 		}
 	}
 
@@ -509,8 +507,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	
 	public void handleDeoptimize()
 	{
-
-		
 		Dimension size = display.getCanvas().getSize();
 		BufferedImage outputBuf = new BufferedImage((int)size.getWidth(), (int)size.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		for (int i=0;i<seq.frames.length;i++) {
@@ -524,36 +520,6 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 			f.scaleX = (int)size.getWidth();
 			f.scaleY = (int)size.getHeight();
 		}
-		
-		
-//		try {
-//			postStatus("");
-//			if (seq==null) {
-//				postStatus(Dict.get("core.handleexport.nothing"));
-//				return;
-//			}
-//			JFileChooser jfc = new JFileChooser(directory);
-//			jfc.setSelectedFile(new File(Dict.get("core.handledeoptimize.defaultname")));
-//			if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
-//			File dest=jfc.getSelectedFile();
-//			directory=jfc.getCurrentDirectory();
-//
-//			Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
-//			setCursor(hourglassCursor);
-//			postStatus(Dict.get("core.handleexport.saving")); // No idea why this does not show!
-//			repaint();
-//			IO.exportDeoptimized(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
-//			postStatus(Dict.get("core.handleexport.finished"));
-//			hourglassCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-//			setCursor(hourglassCursor);
-//		}
-//		catch (FileNotFoundException exp) {
-//			postStatus(Dict.get("core.handleexport.filenotfoundexception",exp.getMessage()));
-//		}
-//		catch(Exception exp) {
-//			postStatus(Dict.get("core.handleexport.exception"));
-//			exp.printStackTrace();
-//		}
 	}
 
 	public void handleLicense() {
@@ -627,7 +593,7 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 	{
 		seqedit.dispose();
 		display.dispose();
-		
+		seq = null;
 		disableButtons();
 	}
 
@@ -678,6 +644,10 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 
 
 	public static void main(String args[]) {
+		//Register TGA plugin
+		IIORegistry registry = IIORegistry.getDefaultInstance();
+		registry.registerServiceProvider(new com.realityinteractive.imageio.tga.TGAImageReaderSpi());
+		
 		if (MacOSCompat.isMacOSX())
 		{
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -778,19 +748,25 @@ ComponentListener, MouseMotionListener, MouseListener, DropTargetListener {
 							seq.add(frames[i], seq.frames.length);
 					else setFrameSequence(new FrameSequence(frames));
 					
-					if (frames.length==1) {
-						//Sucks that this is just duplicated here. Probably needs refactoring
-						//JOptionPane.showInternalMessageDialog(workspace,Dict.get("core.handleload.singlefile.txt"));
-					}
 				}
 			}
 			
 			enableButtons();
-			
 			dragButton.setSelected(true);
 			onionButton.setSelected(false);
+			display.getCanvas().setOnionskin(false);
 
 			dtde.dropComplete(true);
-		} catch (IOException | UnsupportedFlavorException e) {}
+		}
+		catch (IllegalArgumentException exp) {
+			postStatus(Dict.get("core.handleload.illegalargumentexception",exp.getMessage()));
+		}
+		catch (IOException exp) {
+			postStatus(exp.getMessage());
+		}
+		catch (Exception exp) {
+			postStatus(Dict.get("core.handleload.exception"));
+			exp.printStackTrace();
+		}
 	}
 }
