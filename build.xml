@@ -14,7 +14,7 @@
 
 <target name="bundle">
   <jar destfile="giftedmotion-${version}.jar">
-  <fileset dir="." includes="de/ de/resources/" />
+  <fileset dir="." includes="de/ resources/" />
   <manifest>
     <attribute name="Built-By" value="${user.name}"/>
     <attribute name="Main-class" value="de.onyxbits.giftedmotion.Core"/>
