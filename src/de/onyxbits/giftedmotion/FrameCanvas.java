@@ -67,47 +67,45 @@ MouseListener, MouseMotionListener {
 			return;
 		}
 
-		BufferedImage previous = new BufferedImage(size.width,size.height,BufferedImage.TYPE_INT_ARGB);
+		//BufferedImage previous = new BufferedImage(size.width,size.height,BufferedImage.TYPE_INT_ARGB);
 
-		for(int i=0;i<seq.frames.length;i++) {
-			//Well, this is confusing.
-			if ((!onionskinEnabled) || (onionskinEnabled && seq.selected != seq.frames[i])) //Paint normally
-				seq.frames[i].paint(g);
-			else if (i > 0) //Paint the onionskinned frame
+		for(int i = Util.getFirstNecessaryFrame(seq);i<seq.frames.length;i++) {
+			if (onionskinEnabled) //Just draw the previous, and the onionskinned layer on top
 			{
-				Graphics2D g2d = (Graphics2D)g;
-				seq.frames[i-1].paint(g2d);
-				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
-				seq.selected.paint(g2d);
-			} 
-			else seq.selected.paint(g); //No previous frame, just paint normally
-
-			
-			
-			// Only draw the sequence up to the selected frame
-			// FIXME: This is utterly inefficient!
-			if (seq.frames[i]==seq.selected) break;
-
-			// If the selected frame is not reached yet, dispose
-			switch(seq.frames[i].dispose) {
-				case 0: {break;} //Do not draw
-				case 1: { //Draw
-					Graphics pre_gr = previous.getGraphics();
-					seq.frames[i].paint(pre_gr);
-					pre_gr.dispose();
-					break;
-				}
-				case 2: { //Clear
-					g.clearRect(0,0,size.width,size.height);
-					break;
-				}
-				case 3: { //Clear and draw
-					g.clearRect(0,0,size.width,size.height);
-					g.drawImage(previous,0,0,null);
-
-					break;
+				if (seq.selected == seq.frames[i])
+				{
+					Graphics2D g2d = (Graphics2D)g;
+					seq.frames[i-1].paint(g2d);
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
+					seq.selected.paint(g2d);
 				}
 			}
+			else
+			{
+    			// If the selected frame is not reached yet, perform its dispose method
+    			switch(seq.frames[i].dispose) {
+    				case 0: { //Undefined
+    					seq.frames[i].paint(g);
+    					break;
+    				}
+    				case 1: { //None
+    					seq.frames[i].paint(g);
+    					break;
+    				}
+    				case 2: { //Background
+    					g.clearRect(0,0,size.width,size.height);
+    					break;
+    				}
+    				case 3: { //Previous
+    					g.clearRect(0,0,size.width,size.height);
+    					seq.frames[i-1].paint(g);
+    					//g.drawImage(previous,0,0,null);
+    					break;
+    				}
+    			}
+    			// Only draw the sequence up to the selected frame
+    			if (seq.frames[i]==seq.selected) break;
+    		}
 		}
 	}
 

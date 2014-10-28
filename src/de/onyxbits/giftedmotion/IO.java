@@ -47,6 +47,7 @@ public class IO {
 
 			for (int x=0;x<ub;x++) {
 				BufferedImage img = reader.read(x);
+				//if (img.getType() == 4) img = Util.convertIndexed(img);
 				if (ub==1) tmp.add(new SingleFrame(img,files[i].getName()));
 				else {
 					SingleFrame sf = new SingleFrame(img,x+"_"+files[i].getName());
@@ -76,7 +77,7 @@ public class IO {
 					catch (Exception e) {
 						e.printStackTrace();
 					}
-
+					
 					tmp.add(sf);
 				}
 			}
