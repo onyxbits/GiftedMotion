@@ -29,7 +29,6 @@ ActionListener, MouseListener {
    */
   private JButton trans = new JButton(new ColorIcon(Color.MAGENTA,16,16));
   
-  
   /**
    * The colorchooser for the transparency color
    */

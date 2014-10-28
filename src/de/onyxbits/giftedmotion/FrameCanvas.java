@@ -82,14 +82,25 @@ MouseListener, MouseMotionListener {
 			}
 			else
 			{
-    			// If the selected frame is not reached yet, perform its dispose method
+				//Draw the frame, if it won't be immediately erased, but not if it's the last frame.
+				if (seq.frames[i].dispose != 2 && seq.frames[i].dispose != 3 && seq.frames[i] != seq.selected)
+					seq.frames[i].paint(g);
+				
+				//Draw the frame, if it's the last frame
+				if (seq.frames[i] == seq.selected)
+					seq.frames[i].paint(g);
+				
+				//End the loop if we've encountered the last frame
+    			if (seq.frames[i]==seq.selected) break;
+    			
+    			//"Dispose" of the drawn picture
     			switch(seq.frames[i].dispose) {
     				case 0: { //Undefined
-    					seq.frames[i].paint(g);
+    					//seq.frames[i].paint(g);
     					break;
     				}
     				case 1: { //None
-    					seq.frames[i].paint(g);
+    					//seq.frames[i].paint(g);
     					break;
     				}
     				case 2: { //Background
@@ -98,13 +109,11 @@ MouseListener, MouseMotionListener {
     				}
     				case 3: { //Previous
     					g.clearRect(0,0,size.width,size.height);
-    					seq.frames[i-1].paint(g);
+    					if (i > 0) seq.frames[i-1].paint(g);
     					//g.drawImage(previous,0,0,null);
     					break;
     				}
     			}
-    			// Only draw the sequence up to the selected frame
-    			if (seq.frames[i]==seq.selected) break;
     		}
 		}
 	}
