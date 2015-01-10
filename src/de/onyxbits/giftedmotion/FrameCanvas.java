@@ -59,63 +59,46 @@ MouseListener, MouseMotionListener {
 
 	public void paintComponent(Graphics g) {
 		//long time = System.currentTimeMillis();
-		super.paintComponent(g);
-		Dimension size = getSize();
-
-		if (seq.selected==null) {
-			g.clearRect(0,0,size.width,size.height);
-			return;
-		}
-
-		//BufferedImage previous = new BufferedImage(size.width,size.height,BufferedImage.TYPE_INT_ARGB);
-
-		for(int i = Util.getFirstNecessaryFrame(seq);i<seq.frames.length;i++) {
-			if (onionskinEnabled) //Just draw the previous, and the onionskinned layer on top
-			{
-				if (seq.selected == seq.frames[i])
-				{
-					Graphics2D g2d = (Graphics2D)g;
-					seq.frames[i-1].paint(g2d);
-					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
-					seq.selected.paint(g2d);
-				}
-			}
-			else
-			{
-				//Draw the frame, if it won't be immediately erased, but not if it's the last frame.
-				if (seq.frames[i].dispose != 2 && seq.frames[i].dispose != 3 && seq.frames[i] != seq.selected)
-					seq.frames[i].paint(g);
-				
-				//Draw the frame, if it's the last frame
-				if (seq.frames[i] == seq.selected)
-					seq.frames[i].paint(g);
-				
-				//End the loop if we've encountered the last frame
-    			if (seq.frames[i]==seq.selected) break;
-    			
-    			//"Dispose" of the drawn picture
-    			switch(seq.frames[i].dispose) {
-    				case 0: { //Undefined
-    					//seq.frames[i].paint(g);
-    					break;
-    				}
-    				case 1: { //None
-    					//seq.frames[i].paint(g);
-    					break;
-    				}
-    				case 2: { //Background
-    					g.clearRect(0,0,size.width,size.height);
-    					break;
-    				}
-    				case 3: { //Previous
-    					g.clearRect(0,0,size.width,size.height);
-    					if (i > 0) seq.frames[i-1].paint(g);
-    					//g.drawImage(previous,0,0,null);
-    					break;
-    				}
-    			}
-    		}
-		}
+	    super.paintComponent( g );
+	    Dimension size = getSize();
+	    
+	    if (seq.selected==null) {
+	      g.clearRect(0,0,size.width,size.height);
+	      return;
+	    }
+	    
+	    BufferedImage previous = new BufferedImage(size.width,size.height,BufferedImage.TYPE_INT_ARGB);
+	    
+	    for(int i=0;i<seq.frames.length;i++) {
+	      
+	      
+	      seq.frames[i].paint(g);
+	      // Only draw the sequence up to the selected frame
+	      // FIXME: This is utterly inefficient!
+	      if (seq.frames[i]==seq.selected) break;
+	      
+	      // If the selected frame is not reached yet, dispose
+	      switch(seq.frames[i].dispose) {
+	        case 0: {break;}
+	        case 1: {
+	          Graphics pre_gr = previous.getGraphics();
+	          seq.frames[i].paint(pre_gr);
+	          pre_gr.dispose();
+	          break;
+	        }
+	        case 2: {
+	          g.clearRect(0,0,size.width,size.height);
+	          break;
+	        }
+	        case 3: {
+	          g.clearRect(0,0,size.width,size.height);
+	          g.drawImage(previous,0,0,null);
+	          
+	          break;
+	        }
+	      }
+	    }
+	    //System.err.println("Time: "+(System.currentTimeMillis()-time));
 	}
 
 	public Dimension getPreferredSize() { return seq.getExpansion(); }
