@@ -18,13 +18,15 @@ public class Dict  {
    * Contains the translations
    */
   private static ResourceBundle trans;
-  
-  
+
   /**
    * Load the bundle
    */
-  public Dict() {
+  public static void init() {
     trans = ResourceBundle.getBundle(RSRCNAME);
+  }
+
+  private Dict() {
   }
   
   /**
@@ -40,7 +42,7 @@ public class Dict  {
    * @param args the replacement values of the variables in the string
    */
   public static String get(String key, Object[] args) {
-    String val=null;
+    String val;
     try {
       val = trans.getString(key);
     }
@@ -58,7 +60,7 @@ public class Dict  {
   
   /**
    * Fetch a key from the i18n file and replace its variable with a value
-   * @param args the replacement value of the variable in the string
+   * @param arg the replacement value of the variable in the string
    */
   public static String get(String key, Object arg) {
     Object[] tmp = {arg};

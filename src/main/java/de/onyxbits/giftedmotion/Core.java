@@ -16,115 +16,68 @@ import static de.onyxbits.giftedmotion.IO.*;
 public class Core extends JFrame implements WindowListener, ActionListener,
         ComponentListener, MouseMotionListener, MouseListener {
 
-  /**
-   * Program version as shown in the title
-   */
-  public static final String VERSION="GiftedMotion "+Package.getPackage("de.onyxbits.giftedmotion").getImplementationVersion();
+  /** Program version as shown in the title */
+  public static final String VERSION="GiftedMotion "+ Core.class.getClassLoader().getDefinedPackage("de.onyxbits.giftedmotion").getImplementationVersion();
+
+  /** Quit program */
+  private final JMenuItem quit = new JMenuItem(Dict.get("core.quit"),KeyEvent.VK_Q);
   
-  /**
-   * Back reference to the running program
-   */
-  public static Core app;
+  /** Load files */
+  private final JMenuItem load = new JMenuItem(Dict.get("core.load"),KeyEvent.VK_L);
   
-  /**
-   * Quit program
-   */
-  private JMenuItem quit = new JMenuItem(Dict.get("core.quit"),KeyEvent.VK_Q);
+  /** Export as animated GIF */
+  private final JMenuItem export = new JMenuItem(Dict.get("core.export"),KeyEvent.VK_S);
   
-  /**
-   * Load files
-   */
-  private JMenuItem load = new JMenuItem(Dict.get("core.load"),KeyEvent.VK_L);
+  /** Save the sequence as individual files */
+  private final JMenuItem extract = new JMenuItem(Dict.get("core.extract"),KeyEvent.VK_E);
   
-  /**
-   * Export as animated GIF
-   */
-  private JMenuItem export = new JMenuItem(Dict.get("core.export"),KeyEvent.VK_S);
+  /** Display license */
+  private final JMenuItem license = new JMenuItem(Dict.get("core.license"));
   
-  /**
-   * Save the sequence as individual files
-   */
-  private JMenuItem extract = new JMenuItem(Dict.get("core.extract"),KeyEvent.VK_E);
+  /** Go to homepage */
+  private final JMenuItem handbook = new JMenuItem(Dict.get("core.handbook"));
   
-  /**
-   * Display license
-   */
-  private JMenuItem license = new JMenuItem(Dict.get("core.license"));
+  /** Go to FAQ */
+  private final JMenuItem faq = new JMenuItem(Dict.get("core.faq"));
   
-  /**
-   * Go to homepage
-   */
-  private JMenuItem handbook = new JMenuItem(Dict.get("core.handbook"));
+  /** Play animation */
+  private final JButton play = new JButton(createIcon("Tango/22x22/actions/media-playback-start.png",Dict.get("core.play")));
   
-  /**
-   * Go to FAQ
-   */
-  private JMenuItem faq = new JMenuItem(Dict.get("core.faq"));
+  /** Pause animation */
+  private final JButton pause = new JButton(createIcon("Tango/22x22/actions/media-playback-pause.png",Dict.get("core.pause")));
   
-  /**
-   * Play animation
-   */
-  private JButton play = new JButton(createIcon("Tango/22x22/actions/media-playback-start.png",Dict.get("core.play")));
+  /** Record (same as export) */
+  private final JButton record = new JButton(createIcon("Tango/22x22/actions/media-record.png",Dict.get("core.record")));
   
-  /**
-   * Pause animation
-   */
-  private JButton pause = new JButton(createIcon("Tango/22x22/actions/media-playback-pause.png",Dict.get("core.pause")));
+  /** Import (same as load) */
+  private final JButton open = new JButton(createIcon("Tango/22x22/actions/document-open.png",Dict.get("core.open")));
   
-  /**
-   * Record (same as export)
-   */
-  private JButton record = new JButton(createIcon("Tango/22x22/actions/media-record.png",Dict.get("core.record")));
+  /** Toggle displaying of the settings window */
+  private final JButton togglesettings = new JButton(createIcon("Tango/22x22/categories/preferences-desktop.png",Dict.get("core.togglesettings")));
   
-  /**
-   * Import (same as load)
-   */
-  private JButton open = new JButton(createIcon("Tango/22x22/actions/document-open.png",Dict.get("core.open")));
-  
-  /**
-   * Toggle displaying of the settings window
-   */
-  private JButton togglesettings = new JButton(createIcon("Tango/22x22/categories/preferences-desktop.png",Dict.get("core.togglesettings")));
-  
-  /**
-   * Sequence Editor
-   */
+  /** Sequence Editor */
   private SequenceEditor seqedit;
   
-  /**
-   *  Frame Display
-   */
+  /** Frame Display */
   private FrameDisplay display;
   
-  /**
-   * Settings editor
-   */
-  private SettingsEditor setedit = new SettingsEditor(); 
+  /** Settings editor */
+  private final SettingsEditor setedit = new SettingsEditor();
   
-  /**
-   * The main workspace
-   */
-  private JDesktopPane workspace = new JDesktopPane();
+  /** The main workspace */
+  private final JDesktopPane workspace = new JDesktopPane();
   
-  /**
-   * The framesequence being worked upon
-   */
+  /** The framesequence being worked upon */
   private FrameSequence seq;
   
-  /**
-   * Directory, to open filedialogs with
-   */
+  /** Directory, to open filedialogs with */
   private File directory = new File(System.getProperty("user.dir"));
   
-  /**
-   * Used for doing an animation preview
-   */
+  /** Used for doing an animation preview */
   private Player player;
   
-  /**
-   * For displaying status messages
-   */
-  private JLabel status = new JLabel();
+  /** For displaying status messages */
+  private final JLabel status = new JLabel();
   
   /**
    * Construct a new instance of the program. There may only be one object
@@ -146,9 +99,9 @@ public class Core extends JFrame implements WindowListener, ActionListener,
     togglesettings.addActionListener(this);
     
     // Fancy stuff
-    quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,ActionEvent.CTRL_MASK));
-    load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,ActionEvent.CTRL_MASK));
-    export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
+    quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
+    load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
+    export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
     handbook.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
     open.setToolTipText(((ImageIcon)open.getIcon()).getDescription());
     play.setToolTipText(((ImageIcon)play.getIcon()).getDescription());
@@ -209,7 +162,7 @@ public class Core extends JFrame implements WindowListener, ActionListener,
    **/
 
   public void windowClosing(WindowEvent e) { handleQuit(); }
-  public void focusLost(FocusEvent e) {}
+
   public void windowOpened(WindowEvent e) {}
   public void windowClosed(WindowEvent e) {}
   public void windowIconified(WindowEvent e) {}
@@ -238,9 +191,9 @@ public class Core extends JFrame implements WindowListener, ActionListener,
   
   public void componentResized(ComponentEvent e) {
     Component c = (Component)e.getSource();
-    Integer size[] = {
-      new Integer(c.getWidth()),
-      new Integer(c.getHeight())
+    Integer[] size = {
+            c.getWidth(),
+            c.getHeight()
     };
     postStatus(Dict.get("core.componentresized",size));
   }
@@ -248,9 +201,9 @@ public class Core extends JFrame implements WindowListener, ActionListener,
   public void mouseMoved(MouseEvent e) {}
   public void mouseDragged(MouseEvent e) {
     if (seq.selected==null) return;
-    Integer pos[] = {
-      new Integer(seq.selected.position.x),
-      new Integer(seq.selected.position.y)
+    Integer[] pos = {
+            seq.selected.position.x,
+            seq.selected.position.y
     };
     postStatus(Dict.get("core.mousedragged",pos));
   }
@@ -261,9 +214,9 @@ public class Core extends JFrame implements WindowListener, ActionListener,
   
   public void mousePressed(MouseEvent e) {
     if (seq.selected==null) return;
-    Integer pos[] = {
-      new Integer(seq.selected.position.x),
-      new Integer(seq.selected.position.y)
+    Integer[] pos = {
+            seq.selected.position.x,
+            seq.selected.position.y
     };
     postStatus(Dict.get("core.mousepressed",pos));
   }
@@ -306,7 +259,7 @@ public class Core extends JFrame implements WindowListener, ActionListener,
       }
       
       SingleFrame[] frames = load(selected);
-      if (frames==null || frames.length==0) {
+      if (frames.length == 0) {
         postStatus(Dict.get("core.handleload.nothing"));
         return;
       }
@@ -437,14 +390,10 @@ public class Core extends JFrame implements WindowListener, ActionListener,
   }
   
   public void handleTogglesettings() {
-    if (setedit.isVisible()) setedit.setVisible(false);
-    else setedit.setVisible(true);
+    setedit.setVisible(!setedit.isVisible());
   }
   
-  /**
-   **  Utility functions
-   **/
-  
+
   /**
    * Dispatch a new FrameSequence to the application
    * @param seq the sequence to distribute to all gui elements
@@ -487,16 +436,21 @@ public class Core extends JFrame implements WindowListener, ActionListener,
   }
   
 
-  public static void main(String args[]) {
-    new Dict();
-    app = new Core();
+  public static void main(String[] args) {
+    Dict.init();
+
+    EventQueue.invokeLater(() -> startApp(args));
+  }
+
+  private static void startApp(String[] args) {
+    Core app = new Core();
     app.setSize(new Dimension(800,600));
     app.setTitle(VERSION);
     CatchOldJava.decorateWindow(app);
-    
+
     app.setVisible(true);
     app.addWindowListener(app);
-    
+
     // If commandlinearguments are given, try to load them as files
     // This feature is intended for developer use and may change or go
     // away in future versions.
