@@ -1,11 +1,10 @@
 package de.onyxbits.giftedmotion;
+
+import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.beans.*;
-import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
 
 /**
  * Accessory for the Loading dialog
@@ -20,7 +19,7 @@ public class LoadAccessory extends JPanel implements PropertyChangeListener {
   /**
    * Image preview canvas
    */
-  private Preview preview = new Preview();
+  private final Preview preview = new Preview();
   
   public LoadAccessory() {
     setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));

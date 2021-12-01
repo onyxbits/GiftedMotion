@@ -16,7 +16,7 @@ MouseListener, MouseMotionListener {
   /**
    * The sequence to draw
    */
-  private FrameSequence seq;
+  private final FrameSequence seq;
   
   /**
    * Used for dragging -> Where the mousecursor is relative to the position

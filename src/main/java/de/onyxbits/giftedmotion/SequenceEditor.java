@@ -13,7 +13,7 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
   /**
    * Dispose codes in readable form
    */
-  private String[] dcodes = {
+  private final String[] dcodes = {
     Dict.get("sequenceeditor.dcodes.0"),
     Dict.get("sequenceeditor.dcodes.1"),
     Dict.get("sequenceeditor.dcodes.2"),
@@ -23,63 +23,63 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
   /**
    * Lists all frames in the sequence
    */
-  private JList frlst;
+  private final JList<SingleFrame> frlst;
   
   /**
    * X Offset
    */
-  private JSpinner xoff = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1));
+  private final JSpinner xoff = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1));
   
   /**
    * Y Offset
    */
-  private JSpinner yoff = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1));
+  private final JSpinner yoff = new JSpinner(new SpinnerNumberModel(0,-1000000,1000000,1));
   
   /**
    * Peer for SingleFrame.showtime
    */
-  private JSpinner showtime = new JSpinner(new SpinnerNumberModel(100,1,1000000,10));
+  private final JSpinner showtime = new JSpinner(new SpinnerNumberModel(100,1,1000000,10));
   
   /**
    * Peer for SingleFrame.dispose
    */
-  private JSpinner dispose = new JSpinner(new SpinnerListModel(dcodes));
+  private final JSpinner dispose = new JSpinner(new SpinnerListModel(dcodes));
   
   /**
    * Move frame in sequence
    */
-  private JButton sooner = new JButton(IO.createIcon("Tango/22x22/actions/go-up.png",Dict.get("sequenceeditor.sooner")));
+  private final JButton sooner = new JButton(IO.createIcon("Tango/22x22/actions/go-up.png",Dict.get("sequenceeditor.sooner")));
   
   /**
    * Mode frame in sequence
    */
-  private JButton later = new JButton(IO.createIcon("Tango/22x22/actions/go-down.png",Dict.get("sequenceeditor.later")));
+  private final JButton later = new JButton(IO.createIcon("Tango/22x22/actions/go-down.png",Dict.get("sequenceeditor.later")));
 
   /**
    * Duplicate current frame
    */
-  private JButton duplicate = new JButton(IO.createIcon("Tango/22x22/actions/edit-copy.png",Dict.get("sequenceeditor.copy")));
+  private final JButton duplicate = new JButton(IO.createIcon("Tango/22x22/actions/edit-copy.png",Dict.get("sequenceeditor.copy")));
   
   /**
    * Trash current frame
    */
-  private JButton delete = new JButton(IO.createIcon("Tango/22x22/actions/edit-delete.png",Dict.get("sequenceeditor.delete")));
+  private final JButton delete = new JButton(IO.createIcon("Tango/22x22/actions/edit-delete.png",Dict.get("sequenceeditor.delete")));
   
   /**
    * The checkbox to apply the changes to all frames
    */
-  private JCheckBox apply = new JCheckBox(Dict.get("sequenceeditor.apply"),false);
+  private final JCheckBox apply = new JCheckBox(Dict.get("sequenceeditor.apply"),false);
   
   /**
    * The framesequence, displayed
    */
-  private FrameSequence seq;
+  private final FrameSequence seq;
   
   public SequenceEditor(FrameSequence seq) {
     super(Dict.get("sequenceeditor.sequenceeditor.title"),false,false,false,false);
     
     this.seq=seq;
-    frlst = new JList(seq.frames);
+    frlst = new JList<>(seq.frames);
     
     setContentPane(getContent());
     pack();
@@ -325,11 +325,11 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     
     Object src = e.getSource();
     if (src==showtime) {
-      int val=((Integer)showtime.getValue()).intValue();
+      int val= (Integer) showtime.getValue();
       if (apply.isSelected()) {
         for (int i=0;i<seq.frames.length;i++) seq.frames[i].showtime=val;
       }
-      else seq.selected.showtime=((Integer)showtime.getValue()).intValue();
+      else seq.selected.showtime= (Integer) showtime.getValue();
       seq.fireDataChanged();
     }
     
@@ -346,8 +346,8 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     }
     
     if (src==xoff || src==yoff) {
-      int x=((Integer)xoff.getValue()).intValue();
-      int y=((Integer)yoff.getValue()).intValue();
+      int x= (Integer) xoff.getValue();
+      int y= (Integer) yoff.getValue();
       Point val = new Point(x,y);
       if (apply.isSelected()) {
         for (int i=0;i<seq.frames.length;i++) seq.frames[i].position=val;
@@ -370,9 +370,9 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     frlst.setSelectedValue(src.selected,true);
     if (src.selected!=null) {
       dispose.setValue(dcodes[src.selected.dispose]);
-      showtime.setValue(new Integer(src.selected.showtime));
-      xoff.setValue(new Integer(src.selected.position.x));
-      yoff.setValue(new Integer(src.selected.position.y));
+      showtime.setValue(src.selected.showtime);
+      xoff.setValue(src.selected.position.x);
+      yoff.setValue(src.selected.position.y);
     }
     
     frlst.addListSelectionListener(this);
@@ -381,13 +381,10 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     xoff.addChangeListener(this);
     yoff.addChangeListener(this);
   }
-  
-  
+
 
   public void valueChanged(ListSelectionEvent e) {
-    seq.selected=(SingleFrame)frlst.getSelectedValue();
+    seq.selected = frlst.getSelectedValue();
     seq.fireDataChanged();
   }
-  
-  
 }

@@ -10,7 +10,7 @@ public class FrameDisplay extends JInternalFrame {
   /**
    * The canvas to draw upon
    */
-  private FrameCanvas canvas;
+  private final FrameCanvas canvas;
   
   
   public FrameDisplay(FrameCanvas canvas) {

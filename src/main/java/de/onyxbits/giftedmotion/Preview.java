@@ -1,11 +1,10 @@
 package de.onyxbits.giftedmotion;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.geom.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.*;
-import javax.imageio.*;
-import java.util.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 /**
  * Preview an image file
@@ -27,7 +26,7 @@ public class Preview extends JPanel {
   
   /**
    * Display an image
-   * @param file the file to display. If it cannot be loaded, nothing will be
+   * @param f the file to display. If it cannot be loaded, nothing will be
    * displayed.
    */
   public void show(File f) {

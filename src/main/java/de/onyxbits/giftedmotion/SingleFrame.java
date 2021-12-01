@@ -36,7 +36,7 @@ public class SingleFrame  {
   /**
    * For identifying purposes
    */
-  private String name;
+  private final String name;
   
   
   /**
@@ -59,6 +59,7 @@ public class SingleFrame  {
     this.name=frame.name;
     position=new Point(frame.position);
     showtime=frame.showtime;
+    dispose = frame.dispose;
   }
   
   /**

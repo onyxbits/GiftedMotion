@@ -52,6 +52,6 @@ public class Player extends Thread {
         if (repeat!=0 && count<=0) return;
       }
     }
-    catch (Exception exp) {}
+    catch (Exception ignored) {}
   }
 }

@@ -7,10 +7,9 @@ import java.awt.*;
  */
 public class ColorIcon implements Icon {
   
-  private Color color;
-  
-  private int width;
-  private int height;
+  private final Color color;
+  private final int width;
+  private final int height;
   
   public ColorIcon(Color c, int w, int h) {
     color=c;
@@ -24,16 +23,16 @@ public class ColorIcon implements Icon {
   public Color getColor() { return color;}
   
   public void paintIcon(Component c, Graphics g, int x, int y) {
+    Color tmp = g.getColor();
+
     if (color==null) {
-      Color tmp = g.getColor();
       IO.createIcon("Tango/16x16/actions/process-stop.png","").paintIcon(c,g,x,y);
-      g.setColor(tmp);
     }
     else {
-      Color tmp = g.getColor();
       g.setColor(color);
       g.fillRect(x,y,width,height);
-      g.setColor(tmp);
     }
+
+    g.setColor(tmp);
   }
 }

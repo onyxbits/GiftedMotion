@@ -1,6 +1,7 @@
 package de.onyxbits.giftedmotion;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -8,20 +9,14 @@ import java.util.*;
  */
 public class FrameSequence {
 
-  /**
-   * The frames, this sequence consists of.
-   */
+  /** The frames, this sequence consists of. */
   protected SingleFrame[] frames;
   
-  /**
-   * The frame, that is currently subject to editing;
-   */
+  /** The frame, that is currently subject to editing. */
   protected SingleFrame selected;
   
-  /**
-   * Eventlisteners
-   */
-  private Vector listeners = new Vector();
+  /** Eventlisteners */
+  private final List<FrameSequenceListener> listeners = new Vector<FrameSequenceListener>();
   
   /**
    * Create a new FrameSequence
@@ -76,8 +71,8 @@ public class FrameSequence {
       return;
     }
     if (frames.length==0) return;
-    Vector tmp = new Vector();
-    for(int i=0;i<frames.length;i++) tmp.add(frames[i]);
+    var tmp = new Vector<SingleFrame>();
+    Collections.addAll(tmp, frames);
     tmp.remove(frame);
     frames = new SingleFrame[tmp.size()];
     tmp.copyInto(frames);
@@ -94,10 +89,10 @@ public class FrameSequence {
    */
   public Dimension getExpansion() {
     Dimension ret = new Dimension(1,1);
-    for (int i=0;i<frames.length;++i) {
-      Dimension d = frames[i].getSize();
-      if (d.width>ret.width) ret.width=d.width;
-      if (d.height>ret.height) ret.height=d.height;
+    for (SingleFrame frame : frames) {
+      Dimension d = frame.getSize();
+      if (d.width > ret.width) ret.width = d.width;
+      if (d.height > ret.height) ret.height = d.height;
     }
     return ret;
   }
@@ -136,24 +131,13 @@ public class FrameSequence {
   public void addFrameSequenceListener(FrameSequenceListener fsl) {
     listeners.add(fsl);
   }
-  
-  /**
-   * Deregister listener
-   * @param fsl listener to remove
-   */
-  public void removeFrameSequenceListener(FrameSequenceListener fsl) {
-    listeners.remove(fsl);
-  }
-  
+
   /**
    * Notify Framesequencelisteners, that the data changed
-   
    */
   protected void fireDataChanged() {
-    int size= listeners.size();
-    for(int i=0;i<size;i++) {
-      ((FrameSequenceListener)listeners.get(i) ).dataChanged(this);
+    for (FrameSequenceListener listener : listeners) {
+      listener.dataChanged(this);
     }
   }
-  
 }
