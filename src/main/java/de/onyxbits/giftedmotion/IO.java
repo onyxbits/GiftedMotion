@@ -121,7 +121,7 @@ public class IO {
    * @return the loaded icon
    */
   public static ImageIcon createIcon(String fname,String desc) {
-    URL imgURL = new Object().getClass().getResource("/resources/icons/"+fname);
+    URL imgURL = IO.class.getResource("/icons/"+fname);
     return new ImageIcon(imgURL,desc);
   }
   

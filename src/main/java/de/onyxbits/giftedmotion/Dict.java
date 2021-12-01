@@ -12,7 +12,7 @@ public class Dict  {
   /**
    * The "classname" of the resource containing the translations
    */
-  public static final String RSRCNAME = "resources.i18n";
+  public static final String RSRCNAME = "i18n";
   
   /**
    * Contains the translations

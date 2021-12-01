@@ -2,3 +2,7 @@
 *~
 DEADJOE
 *.jar
+
+out/**
+.idea
+GiftedMotion.iml
