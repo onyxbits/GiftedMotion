@@ -1,5 +1,6 @@
 package de.onyxbits.giftedmotion;
-import java.awt.*;
+
+import java.awt.Color;
 
 /**
  * The settings to use when rendering

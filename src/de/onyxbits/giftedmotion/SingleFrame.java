@@ -70,7 +70,7 @@ public class SingleFrame  {
   
   /**
    * Specify position of the raw image on the canvas
-   * @param r the x and y coordinate of where to draw the raw image on the
+   * @param p the x and y coordinate of where to draw the raw image on the
    * canvas.
    */
   public void setPosition(Point p) { position=p; }

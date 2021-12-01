@@ -1,17 +1,20 @@
 package de.onyxbits.giftedmotion;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.awt.event.*;
+
 import javax.swing.*;
-import javax.swing.border.*;
-import java.net.*;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import static de.onyxbits.giftedmotion.IO.*;
 
 /**
  * Core class
  */
-public class Core extends JFrame implements WindowListener, ActionListener, 
-ComponentListener, MouseMotionListener, MouseListener {
+public class Core extends JFrame implements WindowListener, ActionListener,
+        ComponentListener, MouseMotionListener, MouseListener {
 
   /**
    * Program version as shown in the title
@@ -61,27 +64,27 @@ ComponentListener, MouseMotionListener, MouseListener {
   /**
    * Play animation
    */
-  private JButton play = new JButton(IO.createIcon("Tango/22x22/actions/media-playback-start.png",Dict.get("core.play")));
+  private JButton play = new JButton(createIcon("Tango/22x22/actions/media-playback-start.png",Dict.get("core.play")));
   
   /**
    * Pause animation
    */
-  private JButton pause = new JButton(IO.createIcon("Tango/22x22/actions/media-playback-pause.png",Dict.get("core.pause")));
+  private JButton pause = new JButton(createIcon("Tango/22x22/actions/media-playback-pause.png",Dict.get("core.pause")));
   
   /**
    * Record (same as export)
    */
-  private JButton record = new JButton(IO.createIcon("Tango/22x22/actions/media-record.png",Dict.get("core.record")));
+  private JButton record = new JButton(createIcon("Tango/22x22/actions/media-record.png",Dict.get("core.record")));
   
   /**
    * Import (same as load)
    */
-  private JButton open = new JButton(IO.createIcon("Tango/22x22/actions/document-open.png",Dict.get("core.open")));
+  private JButton open = new JButton(createIcon("Tango/22x22/actions/document-open.png",Dict.get("core.open")));
   
   /**
    * Toggle displaying of the settings window
    */
-  private JButton togglesettings = new JButton(IO.createIcon("Tango/22x22/categories/preferences-desktop.png",Dict.get("core.togglesettings")));
+  private JButton togglesettings = new JButton(createIcon("Tango/22x22/categories/preferences-desktop.png",Dict.get("core.togglesettings")));
   
   /**
    * Sequence Editor
@@ -302,7 +305,7 @@ ComponentListener, MouseMotionListener, MouseListener {
         return;
       }
       
-      SingleFrame[] frames = IO.load(selected);
+      SingleFrame[] frames = load(selected);
       if (frames==null || frames.length==0) {
         postStatus(Dict.get("core.handleload.nothing"));
         return;
@@ -336,7 +339,7 @@ ComponentListener, MouseMotionListener, MouseListener {
       if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
       File dest=jfc.getSelectedFile();
       directory=jfc.getCurrentDirectory();
-      IO.extract(seq,dest);
+      extract(seq,dest);
       postStatus(Dict.get("core.handleextract.saved"));
     }
     catch (IOException e) {
@@ -360,7 +363,7 @@ ComponentListener, MouseMotionListener, MouseListener {
       Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
       setCursor(hourglassCursor);
       postStatus(Dict.get("core.handleexport.saving")); // No idea why this does not show!
-      IO.export(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
+      export(dest,seq,display.getCanvas().getSize(),setedit.getSettings());
       postStatus(Dict.get("core.handleexport.finished"));
       hourglassCursor = new Cursor(Cursor.DEFAULT_CURSOR);
       setCursor(hourglassCursor);
@@ -503,7 +506,7 @@ ComponentListener, MouseMotionListener, MouseListener {
         f[i]=new File(args[i]);
       }
       try {
-        SingleFrame[] frames = IO.load(f);
+        SingleFrame[] frames = load(f);
         app.setFrameSequence(new FrameSequence(frames));
       }
       catch (Exception exp) {

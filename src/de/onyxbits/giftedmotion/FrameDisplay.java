@@ -1,6 +1,6 @@
 package de.onyxbits.giftedmotion;
+
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Wrapper around the actual canvas class, to glue it into the workspace
