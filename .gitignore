@@ -3,6 +3,5 @@
 DEADJOE
 *.jar
 
-out/**
-.idea
+target/**
 GiftedMotion.iml
