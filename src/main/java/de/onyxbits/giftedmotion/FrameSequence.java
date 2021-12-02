@@ -16,7 +16,7 @@ public class FrameSequence {
   protected SingleFrame selected;
   
   /** Eventlisteners */
-  private final List<FrameSequenceListener> listeners = new Vector<FrameSequenceListener>();
+  private final List<FrameSequenceListener> listeners = new Vector<>();
   
   /**
    * Create a new FrameSequence
@@ -37,12 +37,11 @@ public class FrameSequence {
     if (index>=0 && index<=frames.length) {
       SingleFrame[] bigger = new SingleFrame[frames.length+1];
       // Copy the first few old ones over
-      for(int i=0;i<index;i++)
-        bigger[i] = frames[i];
+      System.arraycopy(frames, 0, bigger, 0, index);
       bigger[index]=frame; // Add the new frame
       // Copy the rest of the old ones over
-      for(int i=index+1;i<bigger.length;++i)
-        bigger[i] = frames[i-1];
+      if (bigger.length - (index + 1) >= 0)
+        System.arraycopy(frames, index + 1 - 1, bigger, index + 1, bigger.length - (index + 1));
       frames=bigger;
       fireDataChanged();
     }
@@ -110,13 +109,12 @@ public class FrameSequence {
       if (sooner) {
         tmp=frames[idx-1];
         frames[idx-1]=frames[idx];
-        frames[idx]=tmp;
       }
       else {
         tmp=frames[idx+1];
         frames[idx+1]=frames[idx];
-        frames[idx]=tmp;
       }
+      frames[idx]=tmp;
       fireDataChanged();
     }
     catch (Exception e) {

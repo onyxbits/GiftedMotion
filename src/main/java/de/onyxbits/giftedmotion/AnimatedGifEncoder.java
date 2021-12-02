@@ -25,6 +25,7 @@ import java.awt.image.*;
  *
  */
 
+@SuppressWarnings("PointlessBitwiseExpression")
 public class AnimatedGifEncoder {
 
 	protected int width; // image size

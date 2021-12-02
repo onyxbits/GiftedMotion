@@ -99,9 +99,9 @@ public class Core extends JFrame implements WindowListener, ActionListener,
     togglesettings.addActionListener(this);
     
     // Fancy stuff
-    quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-    load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
-    export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+    quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
+    load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
+    export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
     handbook.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
     open.setToolTipText(((ImageIcon)open.getIcon()).getDescription());
     play.setToolTipText(((ImageIcon)play.getIcon()).getDescription());
@@ -347,7 +347,7 @@ public class Core extends JFrame implements WindowListener, ActionListener,
   }
   
   public void handleHandbook() {
-    String url = "http://www.onyxbits.de/giftedmotion/handbook";
+    String url = "https://www.onyxbits.de/giftedmotion/handbook";
     try {
       // Wrap this
       CatchOldJava.openBrowser(url);
@@ -359,7 +359,7 @@ public class Core extends JFrame implements WindowListener, ActionListener,
 
 
   public void handleFAQ() {
-    String url = "http://www.onyxbits.de/faq/giftedmotion";
+    String url = "https://www.onyxbits.de/faq/giftedmotion";
     try {
       // Wrap this
       CatchOldJava.openBrowser(url);

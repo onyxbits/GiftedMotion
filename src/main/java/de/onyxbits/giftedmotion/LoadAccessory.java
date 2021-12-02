@@ -12,11 +12,6 @@ import java.io.File;
 public class LoadAccessory extends JPanel implements PropertyChangeListener {
 
   /**
-   * Lets the user pick a default showtime for each frame
-   */
-  private JSpinner showtime = new JSpinner (new SpinnerNumberModel(100,0,1000000,10));
-  
-  /**
    * Image preview canvas
    */
   private final Preview preview = new Preview();

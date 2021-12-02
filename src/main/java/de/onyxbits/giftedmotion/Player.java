@@ -9,12 +9,12 @@ public class Player extends Thread {
   /**
    * The sequence to play
    */
-  private FrameSequence seq;
+  private final FrameSequence seq;
   
   /**
    * How often to repeat the animation
    */
-  private int repeat;
+  private final int repeat;
   
   /**
    * Needed to fire events from the event dispatcher thread
@@ -23,7 +23,7 @@ public class Player extends Thread {
   
   /**
    * Construct a new Player
-   * @seq the framesequence to play. 
+   * @param seq the framesequence to play.
    * @param repeat how often to repeat the animation (zero is infinite)
    */
   public Player(FrameSequence seq, int repeat) {

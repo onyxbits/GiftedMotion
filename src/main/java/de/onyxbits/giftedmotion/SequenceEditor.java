@@ -124,22 +124,6 @@ FrameSequenceListener, ChangeListener, ListSelectionListener {
     
     order.add(new JScrollPane(frlst));
     order.add(buttons);
-    
-/*
-    JPanel settings = new JPanel();
-    settings.setBorder(BorderFactory.createTitledBorder(Dict.get("sequenceeditor.getcontent.settings")));
-    settings.setLayout(new GridLayout(5,0));
-    settings.add(new JLabel(Dict.get("sequenceeditor.getcontent.showtime")));
-    settings.add(showtime);
-    settings.add(new JLabel(Dict.get("sequenceeditor.getcontent.dispose")));
-    settings.add(dispose);
-    settings.add(new JLabel(Dict.get("sequenceeditor.getcontent.xoff")));
-    settings.add(xoff);
-    settings.add(new JLabel(Dict.get("sequenceeditor.getcontent.yoff")));
-    settings.add(yoff);
-    settings.add(apply);
-*/
-
 
     JLabel label0 = new JLabel(Dict.get("sequenceeditor.getcontent.showtime"));
     JLabel label1 = new JLabel(Dict.get("sequenceeditor.getcontent.dispose"));
