@@ -1,14 +1,20 @@
 package de.onyxbits.giftedmotion;
-import java.io.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.image.*;
+
+import org.w3c.dom.NodeList;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
 import javax.swing.*;
-import java.net.*;
-import javax.imageio.*;
-import java.awt.image.*;
-import javax.imageio.metadata.*;
-import org.w3c.dom.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Vector;
 
 /**
  * Responsible for doing all the disk IO related things
@@ -27,47 +33,47 @@ public class IO {
    * thrown.
    * be loaded will be represented by an errorshape.
    */
-  public static SingleFrame[] load(File[] files) throws IOException, FileNotFoundException, IllegalArgumentException {
-    Vector tmp = new Vector();
-    for(int i=0;i<files.length;i++) {
-      Iterator it = ImageIO.getImageReadersBySuffix(getSuffix(files[i]));
-      if (!it.hasNext()) throw new IllegalArgumentException(files[i].getPath());
-      ImageReader reader = (ImageReader)it.next();
-      reader.setInput(ImageIO.createImageInputStream(new FileInputStream(files[i])));
+  public static SingleFrame[] load(File[] files) throws IOException, IllegalArgumentException {
+    var tmp = new Vector<SingleFrame>();
+
+    for (File file : files) {
+      var it = ImageIO.getImageReadersBySuffix(getSuffix(file));
+      if (!it.hasNext()) throw new IllegalArgumentException(file.getPath());
+      ImageReader reader = it.next();
+      reader.setInput(ImageIO.createImageInputStream(new FileInputStream(file)));
       int ub = reader.getNumImages(true);
-      
-      for (int x=0;x<ub;x++) {
+
+      for (int x = 0; x < ub; x++) {
         BufferedImage img = reader.read(x);
-        if (ub==1) tmp.add(new SingleFrame(img,files[i].getName()));
+        if (ub == 1) tmp.add(new SingleFrame(img, file.getName()));
         else {
-          SingleFrame sf = new SingleFrame(img,x+"_"+files[i].getName());
-          
+          SingleFrame sf = new SingleFrame(img, x + "_" + file.getName());
+
           // Getting meta info from an animated GIF is a bit complicated...
           // ... try the quick and dirty method.
           try {
             IIOMetadata meta = reader.getImageMetadata(x);
             NodeList nl = meta.getAsTree("javax_imageio_gif_image_1.0").getChildNodes();
-            for (int count=0;count<nl.getLength();count++) {
+            for (int count = 0; count < nl.getLength(); count++) {
               IIOMetadataNode node = (IIOMetadataNode) nl.item(count);
               if (node.getNodeName().equals("GraphicControlExtension")) {
-                sf.showtime=10*(Integer.parseInt(node.getAttribute("delayTime")));
-                String dispose=node.getAttribute("disposalMethod");
-                if (dispose.equals("none")) sf.dispose=0;
-                if (dispose.equals("doNotDispose")) sf.dispose=1;
-                if (dispose.equals("restoreToBackgroundColor")) sf.dispose=2;
-                if (dispose.equals("restoreToPrevious")) sf.dispose=3;
+                sf.showtime = 10 * (Integer.parseInt(node.getAttribute("delayTime")));
+                String dispose = node.getAttribute("disposalMethod");
+                if (dispose.equals("none")) sf.dispose = 0;
+                if (dispose.equals("doNotDispose")) sf.dispose = 1;
+                if (dispose.equals("restoreToBackgroundColor")) sf.dispose = 2;
+                if (dispose.equals("restoreToPrevious")) sf.dispose = 3;
               }
               if (node.getNodeName().equals("ImageDescriptor")) {
-                int off_x=(Integer.parseInt(node.getAttribute("imageLeftPosition")));
-                int off_y=(Integer.parseInt(node.getAttribute("imageTopPosition")));
-                sf.position=new Point(off_x,off_y);
+                int off_x = (Integer.parseInt(node.getAttribute("imageLeftPosition")));
+                int off_y = (Integer.parseInt(node.getAttribute("imageTopPosition")));
+                sf.position = new Point(off_x, off_y);
               }
             }
-          }
-          catch (Exception e) {
+          } catch (Exception e) {
             e.printStackTrace();
           }
-          
+
           tmp.add(sf);
         }
       }
@@ -121,13 +127,13 @@ public class IO {
    * @return the loaded icon
    */
   public static ImageIcon createIcon(String fname,String desc) {
-    URL imgURL = new Object().getClass().getResource("/resources/icons/"+fname);
+    URL imgURL = IO.class.getResource("/icons/"+fname);
     return new ImageIcon(imgURL,desc);
   }
   
   /**
    * Helper function to determine filetype
-   * @param the file to look at
+   * @param f the file to look at
    * @return the suffix (lowercase) or null
    */
   private static String getSuffix(File f) {

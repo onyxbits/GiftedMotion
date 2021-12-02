@@ -10,9 +10,10 @@ class LZWEncoder {
 
 	private static final int EOF = -1;
 
-	private int imgW, imgH;
-	private byte[] pixAry;
-	private int initCodeSize;
+	private final int imgW;
+	private final int imgH;
+	private final byte[] pixAry;
+	private final int initCodeSize;
 	private int remaining;
 	private int curPixel;
 
@@ -89,7 +90,7 @@ class LZWEncoder {
 	int cur_accum = 0;
 	int cur_bits = 0;
 
-	int masks[] =
+	int[] masks =
 		{
 			0x0000,
 			0x0001,

@@ -1,6 +1,6 @@
 package de.onyxbits.giftedmotion;
+
 import java.io.File;
-import java.util.*;
 
 /**
  * FileFilter, that only allows imagefiles and optionally directories
@@ -8,8 +8,8 @@ import java.util.*;
 public class ImageFileFilter extends javax.swing.filechooser.FileFilter 
 implements java.io.FileFilter {
 
-  private String ext[] = {"PNG","JPG","JPEG","GIF","BMP"};
-  private boolean diraccept;
+  private final String[] ext = {"PNG","JPG","JPEG","GIF","BMP"};
+  private final boolean diraccept;
   
   /**
    * Create a new FileFilter
@@ -25,8 +25,8 @@ implements java.io.FileFilter {
   
   public boolean accept(File f) {
     if (diraccept && f.isDirectory()) return true;
-    for (int i=0;i<ext.length;i++) {
-      if (f.getName().toUpperCase().endsWith(ext[i])) return true;
+    for (String s : ext) {
+      if (f.getName().toUpperCase().endsWith(s)) return true;
     }
     return false;
   }

@@ -1,8 +1,11 @@
 package de.onyxbits.giftedmotion;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 
 /**
  * The canvas on which to draw SingleFrames
@@ -13,7 +16,7 @@ MouseListener, MouseMotionListener {
   /**
    * The sequence to draw
    */
-  private FrameSequence seq;
+  private final FrameSequence seq;
   
   /**
    * Used for dragging -> Where the mousecursor is relative to the position

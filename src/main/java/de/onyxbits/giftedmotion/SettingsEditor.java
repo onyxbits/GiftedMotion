@@ -1,9 +1,11 @@
 package de.onyxbits.giftedmotion;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.beans.*;
-import javax.swing.event.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Display settings to be used for exporting the frames into the actual
@@ -15,23 +17,23 @@ ActionListener {
   /**
    * How often to repeat
    */
-  private JSpinner repeat = new JSpinner(new SpinnerNumberModel(0,-1,10000,1));
+  private final JSpinner repeat = new JSpinner(new SpinnerNumberModel(0,-1,10000,1));
   
   /**
    * Quality of the dithering
    */
-  private JSpinner quality = new JSpinner(new SpinnerNumberModel(1,1,256,1));
+  private final JSpinner quality = new JSpinner(new SpinnerNumberModel(1,1,256,1));
   
   /**
    * The transparency color
    */
-  private JButton trans = new JButton(new ColorIcon(Color.MAGENTA,16,16));
+  private final JButton trans = new JButton(new ColorIcon(Color.MAGENTA,16,16));
   
   
   /**
    * The colorchooser for the transparency color
    */
-  private JColorChooser chooser = new JColorChooser(Color.MAGENTA);
+  private final JColorChooser chooser = new JColorChooser(Color.MAGENTA);
 
   public SettingsEditor() {
     super(Dict.get("settingseditor.settingseditor.title"),false,true,false,false);
@@ -75,8 +77,8 @@ ActionListener {
   public Settings getSettings() {
     Settings ret = new Settings();
     ret.transparent=((ColorIcon)trans.getIcon()).getColor();
-    ret.quality=((Integer)quality.getValue()).intValue();
-    ret.repeat=((Integer)repeat.getValue()).intValue();
+    ret.quality= (Integer) quality.getValue();
+    ret.repeat= (Integer) repeat.getValue();
     return ret;
   }
   

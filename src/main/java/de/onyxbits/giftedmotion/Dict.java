@@ -1,8 +1,6 @@
 package de.onyxbits.giftedmotion;
 import java.util.*;
 import java.text.*;
-import java.io.*;
-import java.net.*;
 
 /**
  * This class is responsible for i18n
@@ -12,19 +10,21 @@ public class Dict  {
   /**
    * The "classname" of the resource containing the translations
    */
-  public static final String RSRCNAME = "resources.i18n";
+  public static final String RSRCNAME = "i18n";
   
   /**
    * Contains the translations
    */
   private static ResourceBundle trans;
-  
-  
+
   /**
    * Load the bundle
    */
-  public Dict() {
+  public static void init() {
     trans = ResourceBundle.getBundle(RSRCNAME);
+  }
+
+  private Dict() {
   }
   
   /**
@@ -40,7 +40,7 @@ public class Dict  {
    * @param args the replacement values of the variables in the string
    */
   public static String get(String key, Object[] args) {
-    String val=null;
+    String val;
     try {
       val = trans.getString(key);
     }
@@ -58,7 +58,7 @@ public class Dict  {
   
   /**
    * Fetch a key from the i18n file and replace its variable with a value
-   * @param args the replacement value of the variable in the string
+   * @param arg the replacement value of the variable in the string
    */
   public static String get(String key, Object arg) {
     Object[] tmp = {arg};

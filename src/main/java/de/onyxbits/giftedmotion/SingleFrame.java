@@ -36,7 +36,7 @@ public class SingleFrame  {
   /**
    * For identifying purposes
    */
-  private String name;
+  private final String name;
   
   
   /**
@@ -59,6 +59,7 @@ public class SingleFrame  {
     this.name=frame.name;
     position=new Point(frame.position);
     showtime=frame.showtime;
+    dispose = frame.dispose;
   }
   
   /**
@@ -70,7 +71,7 @@ public class SingleFrame  {
   
   /**
    * Specify position of the raw image on the canvas
-   * @param r the x and y coordinate of where to draw the raw image on the
+   * @param p the x and y coordinate of where to draw the raw image on the
    * canvas.
    */
   public void setPosition(Point p) { position=p; }

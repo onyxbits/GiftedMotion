@@ -36,12 +36,12 @@ public class CatchOldJava {
    */
   public static void decorateWindow(Window w) {
     try {
-      ArrayList icolst = new ArrayList();
-      icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-32x32.png")).getImage());  
-      icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-48x48.png")).getImage());
-      icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-64x64.png")).getImage());
-      icolst.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
-      w.setIconImages(icolst);
+      var iconList = new ArrayList<Image>();
+      iconList.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-32x32.png")).getImage());
+      iconList.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-48x48.png")).getImage());
+      iconList.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-64x64.png")).getImage());
+      iconList.add(new ImageIcon(ClassLoader.getSystemResource("resources/logo-96x96.png")).getImage());
+      w.setIconImages(iconList);
     }
     catch (Throwable t) {
       // Really don't care. Its just deco

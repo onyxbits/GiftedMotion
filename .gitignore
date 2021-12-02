@@ -2,3 +2,6 @@
 *~
 DEADJOE
 *.jar
+
+target/**
+GiftedMotion.iml

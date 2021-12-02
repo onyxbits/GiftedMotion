@@ -1,6 +1,6 @@
 package de.onyxbits.giftedmotion;
+
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Wrapper around the actual canvas class, to glue it into the workspace
@@ -10,7 +10,7 @@ public class FrameDisplay extends JInternalFrame {
   /**
    * The canvas to draw upon
    */
-  private FrameCanvas canvas;
+  private final FrameCanvas canvas;
   
   
   public FrameDisplay(FrameCanvas canvas) {

@@ -1,6 +1,7 @@
 package de.onyxbits.giftedmotion;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -8,20 +9,14 @@ import java.util.*;
  */
 public class FrameSequence {
 
-  /**
-   * The frames, this sequence consists of.
-   */
+  /** The frames, this sequence consists of. */
   protected SingleFrame[] frames;
   
-  /**
-   * The frame, that is currently subject to editing;
-   */
+  /** The frame, that is currently subject to editing. */
   protected SingleFrame selected;
   
-  /**
-   * Eventlisteners
-   */
-  private Vector listeners = new Vector();
+  /** Eventlisteners */
+  private final List<FrameSequenceListener> listeners = new Vector<>();
   
   /**
    * Create a new FrameSequence
@@ -42,12 +37,11 @@ public class FrameSequence {
     if (index>=0 && index<=frames.length) {
       SingleFrame[] bigger = new SingleFrame[frames.length+1];
       // Copy the first few old ones over
-      for(int i=0;i<index;i++)
-        bigger[i] = frames[i];
+      System.arraycopy(frames, 0, bigger, 0, index);
       bigger[index]=frame; // Add the new frame
       // Copy the rest of the old ones over
-      for(int i=index+1;i<bigger.length;++i)
-        bigger[i] = frames[i-1];
+      if (bigger.length - (index + 1) >= 0)
+        System.arraycopy(frames, index + 1 - 1, bigger, index + 1, bigger.length - (index + 1));
       frames=bigger;
       fireDataChanged();
     }
@@ -76,8 +70,8 @@ public class FrameSequence {
       return;
     }
     if (frames.length==0) return;
-    Vector tmp = new Vector();
-    for(int i=0;i<frames.length;i++) tmp.add(frames[i]);
+    var tmp = new Vector<SingleFrame>();
+    Collections.addAll(tmp, frames);
     tmp.remove(frame);
     frames = new SingleFrame[tmp.size()];
     tmp.copyInto(frames);
@@ -94,10 +88,10 @@ public class FrameSequence {
    */
   public Dimension getExpansion() {
     Dimension ret = new Dimension(1,1);
-    for (int i=0;i<frames.length;++i) {
-      Dimension d = frames[i].getSize();
-      if (d.width>ret.width) ret.width=d.width;
-      if (d.height>ret.height) ret.height=d.height;
+    for (SingleFrame frame : frames) {
+      Dimension d = frame.getSize();
+      if (d.width > ret.width) ret.width = d.width;
+      if (d.height > ret.height) ret.height = d.height;
     }
     return ret;
   }
@@ -115,13 +109,12 @@ public class FrameSequence {
       if (sooner) {
         tmp=frames[idx-1];
         frames[idx-1]=frames[idx];
-        frames[idx]=tmp;
       }
       else {
         tmp=frames[idx+1];
         frames[idx+1]=frames[idx];
-        frames[idx]=tmp;
       }
+      frames[idx]=tmp;
       fireDataChanged();
     }
     catch (Exception e) {
@@ -136,24 +129,13 @@ public class FrameSequence {
   public void addFrameSequenceListener(FrameSequenceListener fsl) {
     listeners.add(fsl);
   }
-  
-  /**
-   * Deregister listener
-   * @param fsl listener to remove
-   */
-  public void removeFrameSequenceListener(FrameSequenceListener fsl) {
-    listeners.remove(fsl);
-  }
-  
+
   /**
    * Notify Framesequencelisteners, that the data changed
-   
    */
   protected void fireDataChanged() {
-    int size= listeners.size();
-    for(int i=0;i<size;i++) {
-      ((FrameSequenceListener)listeners.get(i) ).dataChanged(this);
+    for (FrameSequenceListener listener : listeners) {
+      listener.dataChanged(this);
     }
   }
-  
 }
